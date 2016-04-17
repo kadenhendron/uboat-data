@@ -1,0 +1,151 @@
+@font-face {
+  font-family: 'bold';
+  src: url("../fonts/bold.eot");
+  src: url("../fonts/bold.eot?#iefix") format("embedded-opentype"), url("../fonts/bold.woff") format("woff"), url("../fonts/bold.ttf") format("truetype"), url("../fonts/bold.svg#bold") format("svg"); }
+
+@font-face {
+  font-family: 'regular';
+  src: url("../fonts/regular.eot");
+  src: url("../fonts/regular.eot?#iefix") format("embedded-opentype"), url("../fonts/regular.woff") format("woff"), url("../fonts/regular.ttf") format("truetype"), url("../fonts/regular.svg#bold") format("svg"); }
+
+@font-face {
+  font-family: 'mono';
+  src: url("../fonts/mono.eot");
+  src: url("../fonts/mono.eot?#iefix") format("embedded-opentype"), url("../fonts/mono.woff") format("woff"), url("../fonts/mono.ttf") format("truetype"), url("../fonts/mono.svg#bold") format("svg"); }
+
+/* line 52, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+html {
+  background-color: #eee;
+  margin: 0;
+  padding: 0;
+  max-width: 1400px;
+  margin: 0 auto; }
+
+/* line 59, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+body {
+  position: relative;
+  font-family: "mono", Helvetica, sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  padding: 0 40px;
+  margin: 0 auto 160px;
+  max-width: 1400px; }
+  @media screen and (max-width: 568px) {
+    /* line 59, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+    body {
+      padding: 0 15px; } }
+
+/* line 72, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+  padding: 0; }
+
+/* line 78, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+#description {
+  font-family: "Arnhem";
+  width: 600px;
+  margin: 60px auto 60px; }
+  /* line 83, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+  #description h2 {
+    margin-bottom: 12px; }
+  /* line 87, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+  #description p {
+    font-weight: 100;
+    font-size: 16px;
+    line-height: 26px; }
+
+/* line 94, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+#legend {
+  border: 2px solid #666;
+  padding: 12px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 200px;
+  font-size: 12px; }
+
+/* line 105, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+#chart-container {
+  position: relative; }
+
+/* line 109, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+#chart {
+  position: relative;
+  margin-right: 240px;
+  font-size: 12px; }
+
+/* line 115, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+.tooltip {
+  position: fixed;
+  text-align: left;
+  background: #fff;
+  border: 2px solid #333;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  font-size: 12px; }
+
+/* line 126, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+.tooltip tr:nth-child(1) td:nth-child(1) {
+  font-weight: bold; }
+
+/* line 133, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+table, th, td {
+  border-collapse: collapse;
+  border: 1px solid #333; }
+
+/* line 138, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+td {
+  padding: 8px; }
+
+/* line 142, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+.x-axis-container {
+  position: absolute;
+  top: -8px;
+  left: 0px;
+  z-index: 5; }
+
+/* line 149, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+.axis {
+  color: #333; }
+
+/* line 153, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+.x text {
+  display: none; }
+
+/* line 157, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+.axis path {
+  display: none; }
+
+/* line 161, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+.axis line {
+  fill: none;
+  stroke: #ccc;
+  shape-rendering: crispEdges; }
+
+/* line 167, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+div.annotation {
+  position: absolute;
+  text-align: left;
+  top: 0;
+  color: #e75b5c; }
+
+/* line 174, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+.sticky {
+  position: fixed; }
+
+/* line 178, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+.target {
+  float: left;
+  background-color: #999;
+  margin: 3px; }
+
+/* line 184, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+.year {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+  display: none; }
+
+/*# sourceMappingURL=style.css.map */

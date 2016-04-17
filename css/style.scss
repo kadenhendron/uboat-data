@@ -1,0 +1,189 @@
+@font-face {
+    font-family: 'bold';
+    src: url('../fonts/bold.eot');
+    src: url('../fonts/bold.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/bold.woff') format('woff'),
+         url('../fonts/bold.ttf') format('truetype'),
+         url('../fonts/bold.svg#bold') format('svg');	 
+}
+
+@font-face {
+    font-family: 'regular';
+    src: url('../fonts/regular.eot');
+    src: url('../fonts/regular.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/regular.woff') format('woff'),
+         url('../fonts/regular.ttf') format('truetype'),
+         url('../fonts/regular.svg#bold') format('svg');	 
+}
+
+@font-face {
+    font-family: 'mono';
+    src: url('../fonts/mono.eot');
+    src: url('../fonts/mono.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/mono.woff') format('woff'),
+         url('../fonts/mono.ttf') format('truetype'),
+         url('../fonts/mono.svg#bold') format('svg');	 
+}
+
+$bold: 'bold', Helvetica, sans-serif;
+$regular: 'regular', Helvetica, sans-serif;
+$mono: 'mono', Helvetica, sans-serif;
+
+$primary-color: yellow;
+$text-color: #333;
+$background-color: #eee;
+
+$break-small: 568px;
+$break-large: 1440px;
+
+@mixin margin-padding-clear {
+	margin:0;
+	padding:0;
+}
+
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+
+html {
+	background-color:$background-color;
+	@include margin-padding-clear;
+	max-width: 1400px;
+	margin: 0 auto;
+}
+
+body {
+	position: relative;
+	font-family: $mono;
+	color: $text-color;
+	@include margin-padding-clear;
+	padding: 0 40px;
+	margin: 0 auto 160px;
+	max-width:1400px;
+	@media screen and (max-width: $break-small) {
+		padding: 0 15px;
+	}
+}
+
+h1,h2,h3,h4,h5,h6, p {
+//	font-weight: normal;
+//	font-family: $bold;
+	@include margin-padding-clear;
+}
+
+#description {
+	font-family: "Arnhem";
+	width: 600px;
+	margin: 60px auto 60px;
+	
+	h2 {
+		margin-bottom:12px;
+	}
+	
+	p {
+		font-weight: 100;
+		font-size: 16px;
+		line-height: 26px;
+	}
+}
+
+#legend {
+	border: 2px solid #666;
+	padding: 12px;
+	position: absolute;
+	right:0;
+	top:0;
+	width: 200px;
+	
+	font-size: 12px;
+}
+
+#chart-container {
+	position:relative;
+}
+
+#chart {
+	position:relative;
+	margin-right: 240px;
+	font-size:12px;
+}
+
+.tooltip {
+	position: fixed;
+	text-align: left;		
+	background: #fff;	
+	border: 2px solid #333;	
+	pointer-events: none;	
+	z-index: 10;
+	opacity:0;
+	font-size: 12px;
+}
+
+.tooltip tr:nth-child(1) td:nth-child(1) {
+	font-weight: bold;
+}
+
+.tooltip tr:nth-child(1) td:nth-child(2) {
+}
+
+table, th, td {
+	border-collapse: collapse;
+	border: 1px solid #333;
+}
+
+td {
+	padding:8px;
+}
+
+.x-axis-container {
+	position:absolute;
+	top:-8px;
+	left: 0px;
+	z-index: 5;
+}
+
+.axis {			  
+  color: #333;
+}
+
+.x text {
+	display: none;
+}
+
+.axis path {
+  display: none;
+}
+
+.axis line {
+  fill: none;
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+div.annotation {
+	position: absolute;			
+	text-align: left;
+	top:0;
+	color:#e75b5c;
+}
+
+.sticky {
+	position:fixed;
+}
+
+.target {
+	float: left;
+	background-color: #999;
+	margin: 3px;
+}
+
+.year {
+	fill: none;
+	stroke: black;
+  	shape-rendering: crispEdges;
+	display: none;
+}

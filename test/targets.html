@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>U-Boat Timeline</title>
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/grid12.css">
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>		
+			<script>if (typeof jQuery === 'undefined') {document.write(unescape('js/jquery.scrollTo.js'));}</script>
+		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		<script src="js/d3.min.js" charset="utf-8"></script>
+		<script src="js/code.js" charset="utf-8"></script>	
+	</head>
+	
+	<body>
+		
+		<div id="description">
+			<h2>U-Boat Timeline</h2>
+			<div class="row">
+				<div class="col-md-6">
+					<p>
+						Germany fielded over 1,100 U-Boats (Unterseeboot) during the Second World War. They were devastating to Allied shipping: over 3,400 ships sunk and many more damaged. But U-boats also suffered some of the worst losses among Germany's armed forces: 793 submarines destroyed and over 28,000 submariners killed. This visualization is a timeline of all 1,153 U-Boats, detailing each submarine's construction, service, successes, and fate.
+					</p>
+				</div>
+				
+				<div class="col-md-6">
+					<div id="legend">
+						<h3>Legend</h3>
+						
+					</div>
+				</div>
+			</div>			
+		</div>
+		
+		<div id="chart">	
+			<table class="tooltip"></table>
+		</div>
+		
+		<script>
+			
+			var margin = {top: 30, right: 20, bottom: 20, left: 50},
+			width = document.getElementById('chart').offsetWidth - margin.left - margin.right,
+			height = 15040 - margin.top - margin.bottom;			
+			
+			var tooltip = d3.select(".tooltip");
+				var tooltip_left = 50, tooltip_top = 35;
+
+//DATA DRAW FUNCTION
+
+			
+			d3.csv("data/uboat-target-data.csv", function(error, targetData) {
+				if (error) throw error;		
+				render(targetData);
+			});
+			
+			function render(data) {
+				
+				data.sort(function(a,b) {return b.tonnage-a.tonnage;});
+
+				var targetGroup = d3.select("#chart").append("div")
+				
+				var targets = targetGroup.selectAll("div")
+					.data(data)
+					.enter()
+					.append("div")					
+					.attr("class", "target")
+					.style("width", function(d) { return d.tonnage/100+ "px"})
+					.style("height", function(d) { return d.tonnage/100 + "px"})
+					.append("div")	
+					.attr("class", "target-name")
+					.text(function(d) { return d.name + " / " + d.tonnage + " tons"})
+					;
+			}
+		</script>
+	</body>
+</html>

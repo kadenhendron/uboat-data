@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>U-Boat Timeline</title>
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/grid12.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>		
+			<script>if (typeof jQuery === 'undefined') {document.write(unescape('js/jquery.scrollTo.js'));}</script>
+		<script src="js/d3.min.js" charset="utf-8"></script>
+		<script src="js/code.js" charset="utf-8"></script>	
+	</head>
+	
+	<body>
+		
+		<div id="description">
+			<h2>U-Boat Timeline</h2>
+			<div class="row">
+				<div class="col-md-6">
+					<p>
+						Germany fielded over 1,100 U-Boats (Unterseeboot) during the Second World War. They were devastating to Allied shipping: over 3,400 ships sunk and many more damaged. But U-boats also suffered some of the worst losses among Germany's armed forces: 793 submarines destroyed and over 28,000 submariners killed. This visualization is a timeline of all 1,153 U-Boats, detailing each submarine's construction, service, successes, and fate.
+					</p>
+				</div>
+				
+				<div class="col-md-6">
+					<div id="legend">
+						<h3>Legend</h3>
+						
+					</div>
+				</div>
+				
+				<p>
+				  <label for="year-input" style="display: inline-block; width: 240px; text-align: right">
+						 Start Year = <span id="year-input-value">…</span>
+				  </label>
+				  <input type="range" min="1934" max="1945" id="year-input">
+				</p>
+			</div>
+			
+		</div>
+		
+		<div id="chart">	
+			<table class="tooltip"></table>
+		</div>
+		
+		<script>
+			
+			function getOrderedDate(d) {
+				return new Date(d.ordered);
+			}
+			
+			function getLaidDownDate(d) {
+				return new Date(d.laid_down);
+			}
+			
+			function getLaunchDate(d) {
+				return new Date(d.launched);
+			}
+			
+			function getFateDate(d) {
+				return new Date(d.fate);
+			}
+			
+			function getAttackDate(d) {
+				return new Date(d.attack_date);
+			}
+			
+			var margin = {top: 30, right: 20, bottom: 20, left: 50},
+			width = document.getElementById('chart').offsetWidth - margin.left - margin.right,
+			height = 15040 - margin.top - margin.bottom;
+			
+			var svgContainer = d3.select("#chart")
+					.append("svg")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", height + margin.top + margin.bottom)
+					.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			
+			var xAxisContainer = d3.select("#chart")
+					.append("svg")
+						.attr("class", "x-axis-container")
+						.attr("width", width + margin.left + margin.right)
+						.attr("height", 40)
+					.append("g")
+						.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			
+			var minDate = new Date("1934"),
+			maxDate = new Date("1/1/1946"),
+			wwiiStart = new Date("9/1/1939"),
+			wwiiEnd = new Date("5/7/1945");
+
+			var y = d3.scale.ordinal().rangeRoundBands([0, height], 1, 0);
+
+			var	x = d3.time.scale().domain([minDate, maxDate]).range([0, width]);
+			
+			var tooltip = d3.select(".tooltip");
+				var tooltip_left = 50, tooltip_top = 35;
+			
+			var markersGroup = svgContainer.append("g");
+			var markersTextGroup = xAxisContainer.append("g");
+			
+			var wwiiStartMarker = markersGroup.append("line")
+				.attr("x1", x(wwiiStart))
+				.attr("y1", -12)
+				.attr("x2", x(wwiiStart))
+				.attr("y2", height)
+				.attr("stroke-width", 1)
+				.attr("shape-rendering","crispEdges")
+				//.attr("stroke-dasharray", "2, 2")
+				.attr("stroke", "#f28788");
+			var wwiiStartMarkerText = markersTextGroup.append("div")
+				.attr("class","annotation")
+				.style("left", x(wwiiStart)+15 + "px")
+				.style("top", 0 + "px")
+				.text("WWII Begins");
+				
+			
+			var wwiiEndMarker = markersGroup.append("line")	
+				.attr("x1", function(d) { return x(wwiiEnd) })
+				.attr("y1", -14)
+				.attr("x2", function(d) { return x(wwiiEnd) })
+				.attr("y2", height)
+				.attr("stroke-width", 1)
+				.attr("shape-rendering","crispEdges")
+				//.attr("stroke-dasharray", "2, 2")
+				.attr("stroke", "#f28788");
+			var wwiiStartMarkerText = markersTextGroup.append("div")
+				.attr("class","annotation")
+				.style("left", x(wwiiEnd)+15 + "px")
+				.style("top", 0 + "px")
+				.text("WWII Ends");
+			
+			var xAxisOverlay = d3.svg.axis()
+					.scale(x)
+					.tickSize(0, 0, 0)
+					.orient("top");
+				
+			var xAxis = d3.svg.axis()
+				.scale(x)
+				.tickSize(-(height-margin.top-margin.bottom), 0, 0)
+				.orient("top");
+
+			var yAxis = d3.svg.axis()
+				.scale(y)
+				.tickSize(0)
+				.orient("left");
+
+			var xAxisBackground = xAxisContainer.append("g")
+				.attr("class", "x-axis-background")
+				.append("line")
+				.attr("x1", -100)
+				.attr("x2", width+100)
+				.attr("y1", -12)
+				.attr("y2", -12)
+				.attr("stroke-width", 36)
+				.attr("stroke", "#eee");
+			
+			var valueline = d3.svg.line()
+				.x(function(d) { return x(d.date); })
+				.y(function(d) { return y(d.close); });
+			
+			function drawOrderedLines(d) {
+				  selection
+					.attr("x1", function(d) { return x(getOrderedDate(d)) })
+					.attr("y1", function(d) { return y(d.name); })
+					.attr("x2", function(d) { return x(getLaidDownDate(d)) })
+					.attr("y2", function(d) { return y(d.name); })
+				  	.attr("x1", 10 )
+					.attr("y1", 200 )
+					.attr("x2", 600 )
+					.attr("y2", 200 )
+					.attr("stroke-width", 10)
+					.attr("stroke", "#ddd")
+				}
+			
+			
+			
+//DATA DRAW FUNCTION
+			
+			d3.csv("data/uboat-data.csv", function(error, data) {
+				if (error) throw error;					
+								
+				y.domain(data.map(function(d) { return d.name; }));
+				
+				var xAxisOverlayGroup = xAxisContainer.append("g")
+					.attr("class", "x-axis-overlay")
+					.call(xAxis);
+				
+				var xAxisGroup = svgContainer.append("g")
+					.attr("class", "x axis")
+					.call(xAxis);
+			
+				var yAxisGroup = svgContainer.append("g")
+					.attr("class", "y axis")
+					.call(yAxis);
+				
+			//ORDERED
+				
+				var orderedLinesGroup = svgContainer.append("g")
+					.attr("class", "ordered lines");
+				
+				//orderedLinesGroup.call(drawOrderedLines);
+				
+				var orderedLines = orderedLinesGroup.selectAll("line")
+					.data(data)
+					.enter()
+					.append("line");
+				
+				var orderedLinesAttributes = orderedLines
+					drawOrderedLines(d);
+								
+			//LAID DOWN
+				
+				var laidDownLinesGroup = svgContainer.append("g")
+				
+				var laidDownLines = laidDownLinesGroup.selectAll("line")
+					.data(data)
+					.enter()
+					.append("line");
+				
+				var dayDistance = 0;
+				
+				var laidDownLinesAttributes = laidDownLines
+					.attr("x1", function(d) { return x(getLaidDownDate(d)) })
+					.attr("y1", function(d) { return y(d.name); })
+					.attr("x2", function(d) { return x(getLaunchDate(d)) })
+					.attr("y2", function(d) { return y(d.name); })
+					.attr("stroke-width", 10)
+					.attr("stroke", "#bbb")
+					.on("mouseover", function(d) {						
+						tooltip.transition()		
+							.duration(50)		
+							.style("opacity", 1);
+						dayDistance = Math.round((getLaunchDate(d)-getLaidDownDate(d))/86400000); //This is returning PIXELS, not actual DAYS
+						tooltip.html(								
+								"<tr><td>" + d.name + "</td><td>" + d.type + "</td></tr> <tr><td colspan='2'> Laid Down: " 
+								+ d.laid_down + "</td></tr><tr><td colspan='2'> Launched: "
+								+ d.launched +  "</td></tr><tr><td colspan='2'>"
+								+ dayDistance + " days under construction</td></tr>"
+								)								
+							.style("left", x(getLaidDownDate(d))+tooltip_left + "px")		
+							.style("top", y(d.name)+tooltip_top + "px");
+					})					
+					.on("mouseout", function(d) {		
+						tooltip.transition()		
+							.duration(50)		
+							.style("opacity", 0);
+					});
+				
+			//LAUNCHED
+				
+				var launchedLinesGroup = svgContainer.append("g")
+				
+				var launchedLines = launchedLinesGroup.selectAll("line")
+					.data(data)
+					.enter()
+					.append("line");	
+				
+				var launchedLinesAttributes = launchedLines
+					.attr("x1", function(d) { return x(getLaunchDate(d)) })
+					.attr("y1", function(d) { return y(d.name); })
+					.attr("x2", function(d) { return x(getFateDate(d)) })
+					.attr("y2", function(d) { return y(d.name); })
+					.attr("stroke-width", 10)
+					.attr("stroke", "#789dcd")
+					.attr("class","launched-line")
+					.on("mouseover", function(d) {						
+						tooltip.transition()		
+							.duration(50)		
+							.style("opacity", 1);
+						dayDistance = Math.round((getFateDate(d)-getLaunchDate(d))/86400000); //This is returning PIXELS, not actual DAYS
+						
+						tooltip.html(								
+								"<tr><td>" + d.name + "</td><td>" + d.type + "</td></tr> <tr><td colspan='2'> Launched: " 
+								+ d.ordered + "</td></tr><tr><td colspan='2'>"
+								+ d.fate_type + ": " + d.fate +  "</td></tr><tr><td colspan='2'>"
+								+ d.ships_sunk + " ships sunk</td></tr><tr><td colspan='2'>"
+								+ dayDistance + " days in service</td></tr>"
+								)								
+							.style("left", x(getLaunchDate(d))+tooltip_left + "px")		
+							.style("top", y(d.name)+tooltip_top + "px");
+					})					
+					.on("mouseout", function(d) {		
+						tooltip.transition()		
+							.duration(50)		
+							.style("opacity", 0);
+					});
+								
+			//FATE
+				
+				var fateCirclesGroup = svgContainer.append("g")
+				
+				var fateCircles = fateCirclesGroup.selectAll("circle")
+					.data(data)
+					.enter()
+					.append("circle");	
+				
+				var fateCirclesAttributes = fateCircles
+					.attr("cx", function (d) { return x(getFateDate(d)); })
+					.attr("cy", function (d) { return y(d.name); })
+					.attr("r", 5)
+					.attr("fill", function(d) {
+						switch (d.fate_type) {
+						case "Sunk":
+							return "#3670bc"
+							break;
+						case "Decommissioned":
+							return "grey"
+							break;
+						case "Scuttled":
+							return "yellow"
+							break;
+						case "Missing":
+							return "green"
+							break;
+						case "Surrendered":
+							return "white"
+							break;
+						case "Captured":
+							return "red"
+							break;
+						case "Grounded":
+							return "tan"
+							break;
+						case "Given":
+							return "purple"
+							break;
+						case "Damaged":
+							return "cyan"
+							break;
+						case "Destroyed":
+							return "orange"
+							break;
+						}
+					})
+					.on("mouseover", function(d) {						
+						tooltip.transition()		
+							.duration(50)		
+							.style("opacity", 1);
+						dayDistance = Math.round((getFateDate(d)-getLaunchDate(d))/86400000); //This is returning PIXELS, not actual DAYS
+						
+						tooltip.html(								
+								"<tr><td>" + d.name + "</td><td>" + d.type + "</td></tr> <tr><td colspan='2'>"
+								+ d.fate_type + " on " + d.fate +  "</td></tr>"
+								)								
+							.style("left", x(getFateDate(d))+tooltip_left + "px")		
+							.style("top", y(d.name)+tooltip_top + "px");
+					})					
+					.on("mouseout", function(d) {		
+						tooltip.transition()		
+							.duration(50)		
+							.style("opacity", 0);
+					});										
+				});
+			
+				d3.csv("data/uboat-target-data.csv", function(error, data2) {
+					if (error) throw error;
+
+					var targetLinesGroup = svgContainer.append("g")
+
+					var targetLines = targetLinesGroup.selectAll("line")
+						.data(data2)
+						.enter()
+						.append("line");	
+
+					var targetLinesAttributes = targetLines
+						.attr("x1", function(d) { return x(getAttackDate(d)) })
+						.attr("y1", function(d) { return y(d.name); })
+						.attr("x2", function(d) { return x(getAttackDate(d))+1 })
+						.attr("y2", function(d) { return y(d.name); })
+						.attr("stroke-width", 10)
+						.attr("stroke", "#3670bc")
+						.attr("shape-rendering","crispEdges");
+				});
+			
+				d3.select("#year-input").on("input", function() {
+				  update(+this.value);
+				});
+			
+				update(1934);
+			
+				function update(yearStart) {
+					
+					var yearStartDate = new Date(yearStart.toString());
+					
+					// adjust the text on the range slider
+					d3.select("#year-input-value").text(yearStart);
+					d3.select("#year-input").property("value", yearStart);
+
+					d3.csv("data/uboat-data.csv", function(error, data) {
+
+						x.domain([yearStartDate, maxDate]).range([0, width]);
+
+						var svg = d3.select("body").transition();
+					
+							svg.selectAll("launched-line")
+								.duration(750)
+								.attr("x1", function(d) { return x(getLaunchDate(d)) })
+								.attr("x2", function(d) { return x(getFateDate(d)) })
+							svg.select(".x.axis") // change the x axis
+								.duration(750)
+								.call(xAxis);
+							svg.select(".x-axis-overlay") // change the x axis
+								.duration(750)
+								.call(xAxis);
+
+					});
+				}
+			
+				
+		</script>
+	</body>
+</html>
