@@ -220,7 +220,7 @@
 				
 				
 				drawTimeline(data);
-				drawLegendCareer(data);
+				drawLegendCareer();
 				drawLegendFate(data);
 			});
 			
@@ -230,75 +230,46 @@
 				legendWidth = 186
 				legendOffset = 10;
 			
-			function drawLegendCareer(data) {
-				
-				var fateTypeCount = d3.nest()
-					.key(function(d) { return d.fate_type; })
-					.rollup(function(v) { return v.length; })
-					.entries(data);
-				
-				fateTypeCount.sort(function(a,b) {return b.values-a.values;});
+			function drawLegendCareer() {
+
+				var careerLegendMarks = [
+				  { name: 'Ordered', color: colorOrdered }, 
+				  { name: 'Under Construction', color: colorLaidDown },
+				  { name: 'In Service', color: colorLaunched },
+				  { name: 'Target Sunk', color: colorLaunched }
+				];
 				
 				var legendFate = d3.select("#legend-career")
 					.append("svg")
 						.attr("width", legendWidth)
-						.attr("height", fateTypeCount.length*(legendSpacing+timelineStroke))
+						.attr("height", careerLegendMarks.length*(legendSpacing+timelineStroke))
 					.append("g")
 						.attr("id","svg-legend-fate");
 				
 				var legendFateItem = legendFate.selectAll("g")
-					.data(fateTypeCount)
+					.data(careerLegendMarks)
 					.enter()
 					.append('g')
 					.attr('class', 'legend-fate-item')
 					.attr('transform', function(d, i) {
 						var height = timelineStroke + legendSpacing;
-						var horz = -2 * timelineStroke+30;
+						var horz = -2 * timelineStroke+24;
 						var vert = i * height+legendOffset;
 						return 'translate(' + horz + ',' + vert + ')';
 					});
 
-				legendFateItem.append('circle')
-					.attr("r", timelineStroke/2)
-					.attr("fill", function(d) {
-						switch (d.key) {
-						case "Sunk":
-							return colorSunk
-							break;
-						case "Decommissioned":
-							return colorDecommissioned
-							break;
-						case "Scuttled":
-							return colorScuttled
-							break;
-						case "Missing":
-							return colorMissing
-							break;
-						case "Surrendered":
-							return colorSurrendered
-							break;
-						case "Captured":
-							return colorCaptured
-							break;
-						case "Grounded":
-							return colorGrounded
-							break;
-						case "Given":
-							return colorGiven
-							break;
-						case "Damaged":
-							return colorDamaged
-							break;
-						case "Destroyed":
-							return colorDestroyed
-							break;
-					};
-				});
+				legendFateItem.append('line')
+					.attr("x1", 0)
+					.attr("y1", 0)
+					.attr("x2", 16)
+					.attr("y2", 0)
+					.attr("stroke-width", timelineStroke)
+					.attr("stroke", function(d) { return d.color;});
 
 				legendFateItem.append('text')                       
-					.attr('x', timelineStroke + 4)
+					.attr('x', timelineStroke + 12)
 					.attr('y', 5)
-					.text(function(d) { return d.key; });
+					.text(function(d) { return d.name; });
 			}
 			
 // Draw Legend Fate
