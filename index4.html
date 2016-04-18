@@ -13,9 +13,12 @@
 	<body>
 		
 		<div id="description">
-			<h2>U-Boat Timeline</h2>
+			<h1>U-Boat Timeline</h1>
 			<p>
-				Germany fielded over 1,100 U-Boats (Unterseeboot) during the Second World War. They were devastating to Allied shipping: over 3,400 ships sunk and many more damaged. But U-boats also suffered some of the worst losses among Germany's armed forces: 793 submarines destroyed and over 28,000 submariners killed. This visualization is a timeline of all 1,153 U-Boats, detailing each submarine's construction, service, successes, and fate.
+				Germany fielded over 1,100 U-Boats (Unterseeboot) during the Second World War. They were devastating to Allied shipping: over 3,400 ships sunk and many more damaged. But U-boats also suffered some of the worst losses among Germany's armed forces: 793 submarines lost and over 28,000 submariners killed.
+			</p>
+			<p>
+				This visualization is a timeline of all 1,153 U-Boats, detailing each submarine's construction, service, successes, and fate. Visit the <a href="https://github.com/kadenhendron/uboat-data">GitHub repository</a> to access the source data and code.
 			</p>
 		</div>
 		<div id="chart-container">
@@ -24,7 +27,16 @@
 			</div>
 			<table id="legend">
 				<tr><th>Legend</th></tr>
-				<tr><td id="legend-fate"></td></tr>
+				<tr>
+					<td id="legend-career">
+						<h3>Career</h3>
+					</td>
+				</tr>
+				<tr>
+					<td id="legend-fate">
+						<h3>Fate</h3>
+					</td>
+				</tr>
 			</table>
 		</div>
 		
@@ -204,23 +216,25 @@
 				
 				
 				drawTimeline(data);
-				drawLegend(data);
+				drawLegendCareer(data);
+				drawLegendFate(data);
 			});
 			
-			function drawLegend(data) {
+			function drawLegendCareer(data) {
+				
+				var legendSpacing = 8;
 				
 				var fateTypeCount = d3.nest()
 					.key(function(d) { return d.fate_type; })
 					.rollup(function(v) { return v.length; })
 					.entries(data);
-					console.log(JSON.stringify(fateTypeCount));
 				
-				var legendSpacing = 8;
+				fateTypeCount.sort(function(a,b) {return b.values-a.values;});
 				
-				var legendFate = d3.select("#legend-fate")
+				var legendFate = d3.select("#legend-career")
 					.append("svg")
 						.attr("width", 186)
-						.attr("height", 400)
+						.attr("height", fateTypeCount.length*(legendSpacing+timelineStroke))
 					.append("g")
 						.attr("id","svg-legend-fate");
 				
@@ -275,7 +289,81 @@
 				});
 
 				legendFateItem.append('text')                       
-					.attr('x', timelineStroke + timelineStroke)
+					.attr('x', timelineStroke + 4)
+					.attr('y', 5)
+					.text(function(d) { return d.key; });
+			}
+			
+			function drawLegendFate(data) {
+				
+				var legendSpacing = 8;
+				
+				var fateTypeCount = d3.nest()
+					.key(function(d) { return d.fate_type; })
+					.rollup(function(v) { return v.length; })
+					.entries(data);
+				
+				fateTypeCount.sort(function(a,b) {return b.values-a.values;});
+				
+				var legendFate = d3.select("#legend-fate")
+					.append("svg")
+						.attr("width", 186)
+						.attr("height", fateTypeCount.length*(legendSpacing+timelineStroke))
+					.append("g")
+						.attr("id","svg-legend-fate");
+				
+				var legendFateItem = legendFate.selectAll("g")
+					.data(fateTypeCount)
+					.enter()
+					.append('g')
+					.attr('class', 'legend-fate-item')
+					.attr('transform', function(d, i) {
+						var height = timelineStroke + legendSpacing;
+						var offset =  10;
+						var horz = -2 * timelineStroke+30;
+						var vert = i * height+offset;
+						return 'translate(' + horz + ',' + vert + ')';
+					});
+
+				legendFateItem.append('circle')
+					.attr("r", timelineStroke/2)
+					.attr("fill", function(d) {
+						switch (d.key) {
+						case "Sunk":
+							return colorSunk
+							break;
+						case "Decommissioned":
+							return colorDecommissioned
+							break;
+						case "Scuttled":
+							return colorScuttled
+							break;
+						case "Missing":
+							return colorMissing
+							break;
+						case "Surrendered":
+							return colorSurrendered
+							break;
+						case "Captured":
+							return colorCaptured
+							break;
+						case "Grounded":
+							return colorGrounded
+							break;
+						case "Given":
+							return colorGiven
+							break;
+						case "Damaged":
+							return colorDamaged
+							break;
+						case "Destroyed":
+							return colorDestroyed
+							break;
+					};
+				});
+
+				legendFateItem.append('text')                       
+					.attr('x', timelineStroke + 4)
 					.attr('y', 5)
 					.text(function(d) { return d.key; });
 			}

@@ -74,11 +74,13 @@ h1,h2,h3,h4,h5,h6, p {
 	@include margin-padding-clear;
 }
 
+
+
 #description {
 	width: 600px;
 	margin: 60px auto 60px;
 	
-	h2 {
+	h1 {
 		font-family: $bold;
 		margin-bottom:12px;
 	}
@@ -87,8 +89,20 @@ h1,h2,h3,h4,h5,h6, p {
 		font-family: $regular;
 		font-size: 16px;
 		line-height: 26px;
+		margin: 0 0 16px;
 	}
-}
+	
+	a {
+		text-decoration: none;
+		font-family: $bold;
+		display: inline-block
+	}
+	
+	a:link 		{ color:$text-color; }
+	a:visited 	{ color:$text-color;}
+	a:hover 	{ color:#000; text-decoration: underline;}
+	a:active 	{ color:$text-color; }
+	}
 #chart-container {
 	position:relative;
 }
@@ -115,11 +129,19 @@ h1,h2,h3,h4,h5,h6, p {
 	td {
 		font-size: 14px;
 		padding:12px;
+		
+		h3 {
+			font-weight: bold;
+			font-size: 14px;
+			margin: 0 0 4px;
+		}
 	}
 	
 	#legend-fate {
 		
 	}
+	
+	
 }
 
 #tooltip {
