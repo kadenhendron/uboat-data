@@ -9,7 +9,7 @@ $( document ).ready(function() {
 
 		if ($(this).scrollTop() > offset && !isPositionFixed){ 
 			$('.x-axis-container').css({'position': 'fixed', 'top': '0px', 'left': left_offset });
-			$('#legend').css({'position': 'fixed', 'top': '20px', 'right': right_offset });
+			$('#legend').css({'position': 'fixed', 'top': '18px', 'right': right_offset });
 		}
 		if ($(this).scrollTop() < offset) {
 			$('.x-axis-container').css({'position': 'absolute', 'top': '-8px', 'left': 0});

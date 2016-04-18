@@ -321,7 +321,7 @@
 							.style("opacity", 1);
 						dayDistance = Math.round((getFateDate(d)-getLaunchDate(d))/86400000); //This is returning PIXELS, not actual DAYS
 						
-						tooltip.html(								
+						tooltip.html(							
 								"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Launched " 
 								+ d.ordered + "</td></tr><tr><td colspan='2'>"
 								+ d.fate_type + " " + d.fate +  "</td></tr><tr><td colspan='2'>"
@@ -387,17 +387,35 @@
 							.style("opacity", 1);
 						dayDistance = Math.round((getFateDate(d)-getLaunchDate(d))/86400000); //This is returning PIXELS, not actual DAYS
 						
-						tooltip.html(								
-								"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'>"
-								+ d.fate_type + " on " + d.fate +  "</td></tr><tr><td colspan='2'>"
-								+ d.fate_survivors + " survivors, " + d.fate_dead + " killed</td></tr>"
-								);
-					})					
+						function getFateCasualties(d) {
+							switch (d.fate_type) {
+								case "Sunk":
+								case "Captured":
+								case "Grounded":
+								case "Damaged":
+								case "Destroyed":
+								case "Missing":
+									return "<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'>"
+											+ d.fate_type + " on " + d.fate +  "</td></tr><tr><td colspan='2'>"
+											+ d.fate_survivors + " survivors, " + d.fate_dead + " dead</td></tr>"
+									break;
+								case "Decommissioned":
+								case "Scuttled":
+								case "Surrendered":
+								case "Given":
+									return "<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'>"
+											+ d.fate_type + " on " + d.fate +  "</td></tr>"
+									break;
+							}
+						}
+						
+						tooltip.html(getFateCasualties(d));
+					})
 					.on("mouseout", function(d) {		
 						tooltip.transition()		
 							.duration(50)		
 							.style("opacity", 0);
-					});	
+					});
 				
 					dropdown.on("change", function() {
 					  var selected = this.value;
