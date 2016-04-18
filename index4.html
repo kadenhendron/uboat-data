@@ -69,13 +69,13 @@
 				colorSunk = "#3670bc",
 				colorDecommissioned = "#888",
 				colorScuttled = "#555555",
-				colorMissing = "green",
-				colorSurrendered = "white",
-				colorCaptured = "red",
-				colorGrounded = "tan",
-				colorGiven = "purple",
-				colorDamaged = "cyan",
-				colorDestroyed = "orange";
+				colorMissing = "#789dcd",
+				colorSurrendered = "#fff",
+				colorCaptured = "#e73f3f",
+				colorGrounded = "#f4db36",
+				colorGiven = "#8b5ec8",
+				colorDamaged = "#42ba72",
+				colorDestroyed = "#df6f3e";
 			
 			var svgContainer = d3.select("#chart")
 				.append("svg")
@@ -84,22 +84,6 @@
 				.append("g")
 					.attr("id","svg-container")
 					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-			
-			var legend = d3.select("#legend-fate");
-			
-//			var legendSVG = legend
-//				.append("svg")
-//					.attr("width", 186)
-//					.attr("height", 400)
-//				.append("g")
-//					.attr("id","svg-legend");
-//			
-//			var legendLines = legend
-//				.append("line")
-//				.attr("x1", function(d) { return x(getLaidDownDate(d)) })
-//				.attr("y1", function(d) { return y(d.name); })
-//				.attr("x2", function(d) { return x(getLaunchDate(d)) })
-//				.attr("y2", function(d) { return y(d.name); });
 			
 			var timelineContainer = svgContainer
 				.append("g")
@@ -218,8 +202,83 @@
 					.attr("class", "y axis")
 					.call(yAxis);
 				
+				
 				drawTimeline(data);
+				drawLegend(data);
 			});
+			
+			function drawLegend(data) {
+				
+				var fateTypeCount = d3.nest()
+					.key(function(d) { return d.fate_type; })
+					.rollup(function(v) { return v.length; })
+					.entries(data);
+					console.log(JSON.stringify(fateTypeCount));
+				
+				var legendSpacing = 8;
+				
+				var legendFate = d3.select("#legend-fate")
+					.append("svg")
+						.attr("width", 186)
+						.attr("height", 400)
+					.append("g")
+						.attr("id","svg-legend-fate");
+				
+				var legendFateItem = legendFate.selectAll("g")
+					.data(fateTypeCount)
+					.enter()
+					.append('g')
+					.attr('class', 'legend-fate-item')
+					.attr('transform', function(d, i) {
+						var height = timelineStroke + legendSpacing;
+						var offset =  10;
+						var horz = -2 * timelineStroke+30;
+						var vert = i * height+offset;
+						return 'translate(' + horz + ',' + vert + ')';
+					});
+
+				legendFateItem.append('circle')
+					.attr("r", timelineStroke/2)
+					.attr("fill", function(d) {
+						switch (d.key) {
+						case "Sunk":
+							return colorSunk
+							break;
+						case "Decommissioned":
+							return colorDecommissioned
+							break;
+						case "Scuttled":
+							return colorScuttled
+							break;
+						case "Missing":
+							return colorMissing
+							break;
+						case "Surrendered":
+							return colorSurrendered
+							break;
+						case "Captured":
+							return colorCaptured
+							break;
+						case "Grounded":
+							return colorGrounded
+							break;
+						case "Given":
+							return colorGiven
+							break;
+						case "Damaged":
+							return colorDamaged
+							break;
+						case "Destroyed":
+							return colorDestroyed
+							break;
+					};
+				});
+
+				legendFateItem.append('text')                       
+					.attr('x', timelineStroke + timelineStroke)
+					.attr('y', 5)
+					.text(function(d) { return d.key; });
+			}
 			
 			function drawTimeline(data) {
 				

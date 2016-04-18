@@ -72,14 +72,14 @@ h1, h2, h3, h4, h5, h6, p {
   right: 0;
   top: 0;
   width: 200px;
-  font-size: 12px;
   text-align: left; }
-  /* line 111, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+  /* line 110, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
   #legend th {
     font-size: 16px;
     padding: 12px; }
-  /* line 116, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+  /* line 115, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
   #legend td {
+    font-size: 14px;
     padding: 12px; }
 
 /* line 125, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */

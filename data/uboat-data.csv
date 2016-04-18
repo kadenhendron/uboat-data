@@ -808,7 +808,7 @@ id,name,type,ordered,laid_down,commissioned,launched,fate,fate_type,fate_survivo
 929,U-929,VIIC/41,4/2/1942,3/20/1943,9/6/1944,9/6/1944,5/1/1945,Scuttled,0,0,"Neptun Werft AG, Rostock",0
 930,U-930,VIIC/41,4/2/1942,4/20/1943,12/6/1944,12/6/1944,5/9/1945,Surrendered,0,0,"Neptun Werft AG, Rostock",0
 951,U-951,VIIC,4/10/1941,1/31/1942,12/3/1942,10/14/1942,7/7/1943,Sunk,0,46,"Blohm & Voss, Hamburg",0
-952,U-952,VIIC,4/10/1941,2/1/1942,12/10/1942,10/14/1942,7/5/1944,?,0,0,"Blohm & Voss, Hamburg",2
+952,U-952,VIIC,4/10/1941,2/1/1942,12/10/1942,10/14/1942,7/5/1944,Damaged,0,0,"Blohm & Voss, Hamburg",2
 953,U-953,VIIC,4/10/1941,2/10/1942,12/17/1942,10/28/1942,5/9/1945,Surrendered,0,0,"Blohm & Voss, Hamburg",0
 954,U-954,VIIC,4/10/1941,2/10/1942,12/23/1942,10/28/1942,5/19/1943,Sunk,0,47,"Blohm & Voss, Hamburg",0
 955,U-955,VIIC,4/10/1941,2/23/1942,12/31/1942,11/14/1942,6/7/1944,Sunk,0,50,"Blohm & Voss, Hamburg",0
