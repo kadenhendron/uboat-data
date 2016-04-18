@@ -131,9 +131,19 @@ h1,h2,h3,h4,h5,h6, p {
 		padding:12px;
 		
 		h3 {
+			position: relative;
 			font-weight: bold;
 			font-size: 14px;
 			margin: 0 0 4px;
+		
+			span {
+				font-weight: normal;
+				position: absolute;
+				right: 0;
+				top: 0;
+				font-size: 14px;
+				text-align: right;
+			}
 		}
 	}
 	

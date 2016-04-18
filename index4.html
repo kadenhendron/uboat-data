@@ -34,7 +34,9 @@
 				</tr>
 				<tr>
 					<td id="legend-fate">
-						<h3>Fate</h3>
+						<h3>Fate 
+							<span>Ship Count</span>
+						</h3>
 					</td>
 				</tr>
 			</table>
@@ -87,7 +89,9 @@
 				colorGrounded = "#f4db36",
 				colorGiven = "#8b5ec8",
 				colorDamaged = "#42ba72",
-				colorDestroyed = "#df6f3e";
+				colorDestroyed = "#df6f3e",
+				colorText = "#333",
+				colorTextLight = "#666";
 			
 			var svgContainer = d3.select("#chart")
 				.append("svg")
@@ -220,9 +224,13 @@
 				drawLegendFate(data);
 			});
 			
+// Draw Legend Career
+			
+			var legendSpacing = 8,
+				legendWidth = 186
+				legendOffset = 10;
+			
 			function drawLegendCareer(data) {
-				
-				var legendSpacing = 8;
 				
 				var fateTypeCount = d3.nest()
 					.key(function(d) { return d.fate_type; })
@@ -233,7 +241,7 @@
 				
 				var legendFate = d3.select("#legend-career")
 					.append("svg")
-						.attr("width", 186)
+						.attr("width", legendWidth)
 						.attr("height", fateTypeCount.length*(legendSpacing+timelineStroke))
 					.append("g")
 						.attr("id","svg-legend-fate");
@@ -245,9 +253,8 @@
 					.attr('class', 'legend-fate-item')
 					.attr('transform', function(d, i) {
 						var height = timelineStroke + legendSpacing;
-						var offset =  10;
 						var horz = -2 * timelineStroke+30;
-						var vert = i * height+offset;
+						var vert = i * height+legendOffset;
 						return 'translate(' + horz + ',' + vert + ')';
 					});
 
@@ -294,9 +301,9 @@
 					.text(function(d) { return d.key; });
 			}
 			
+// Draw Legend Fate
+			
 			function drawLegendFate(data) {
-				
-				var legendSpacing = 8;
 				
 				var fateTypeCount = d3.nest()
 					.key(function(d) { return d.fate_type; })
@@ -307,7 +314,7 @@
 				
 				var legendFate = d3.select("#legend-fate")
 					.append("svg")
-						.attr("width", 186)
+						.attr("width", legendWidth)
 						.attr("height", fateTypeCount.length*(legendSpacing+timelineStroke))
 					.append("g")
 						.attr("id","svg-legend-fate");
@@ -319,9 +326,8 @@
 					.attr('class', 'legend-fate-item')
 					.attr('transform', function(d, i) {
 						var height = timelineStroke + legendSpacing;
-						var offset =  10;
 						var horz = -2 * timelineStroke+30;
-						var vert = i * height+offset;
+						var vert = i * height+legendOffset;
 						return 'translate(' + horz + ',' + vert + ')';
 					});
 
@@ -365,7 +371,15 @@
 				legendFateItem.append('text')                       
 					.attr('x', timelineStroke + 4)
 					.attr('y', 5)
+					.attr('fil', colorText)
 					.text(function(d) { return d.key; });
+				
+				legendFateItem.append('text')                       
+					.attr('x', legendWidth-legendOffset)
+					.attr('y', 5)
+					.attr('fill', colorTextLight)
+					.attr('text-anchor', 'end')
+					.text(function(d) { return d.values; });
 			}
 			
 			function drawTimeline(data) {

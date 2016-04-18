@@ -21,7 +21,9 @@ $( document ).ready(function() {
 		var left_offset = $("#chart-container").offset().left;
 		var right_offset = ($(window).width() - ($("#chart-container").offset().left + $("#chart-container").outerWidth()));
 		
-		$('.x-axis-container').css({'left': left_offset });
-		$('#legend').css({'right': right_offset }); 
+		if ($(this).scrollTop() > offset && !isPositionFixed){ 
+			$('.x-axis-container').css({'position': 'fixed', 'top': '0px', 'left': left_offset });
+			$('#legend').css({'position': 'fixed', 'top': '18px', 'right': right_offset });
+		}
 	});
 });
