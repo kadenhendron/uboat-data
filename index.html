@@ -15,7 +15,7 @@
 		<div id="description">
 			<h1>U-Boat Timeline</h1>
 			<p>
-				Germany fielded 1,153 U-Boats (short for Unterseeboot) during the Second World War. They were devastating to Allied shipping: over 3,400 ships sunk and many more damaged. But U-boats also suffered some of the worst losses among Germany's armed forces: over 700 submarines lost and more than 28,000 submariners killed.
+				Germany commissioned 1,153 U-Boats (<i>Unterseeboot</i>) during the Second World War. They were devastating to Allied shipping: over 3,400 ships sunk and many more damaged. But U-boats also suffered some of the worst losses among Germany's armed forces: over 700 submarines lost and more than 28,000 submariners killed.
 			</p>
 			<p>
 				This visualization is a timeline of all 1,153 U-Boats, detailing each submarine's construction, service, successes, and fate. Visit the <a href="https://github.com/kadenhendron/uboat-data">GitHub repository</a> to access the source data and code.
@@ -81,7 +81,7 @@
 				colorLaunched = "#789dcd",
 				colorLaunchedHover = "#5e8cc9",
 				colorSunk = "#3670bc",
-				colorDecommissioned = "#888",
+				colorDecommissioned = "#999",
 				colorScuttled = "#555555",
 				colorMissing = "#789dcd",
 				colorSurrendered = "#fff",
@@ -228,7 +228,8 @@
 			
 			var legendSpacing = 8,
 				legendWidth = 186
-				legendOffset = 10;
+				legendOffset = 10
+				careerLineLength = 17;
 			
 			function drawLegendCareer() {
 
@@ -261,15 +262,32 @@
 				legendFateItem.append('line')
 					.attr("x1", 0)
 					.attr("y1", 0)
-					.attr("x2", 16)
+					.attr("x2", careerLineLength)
 					.attr("y2", 0)
 					.attr("stroke-width", timelineStroke)
 					.attr("stroke", function(d) { return d.color;});
-
+				
 				legendFateItem.append('text')                       
 					.attr('x', timelineStroke + 12)
 					.attr('y', 5)
 					.text(function(d) { return d.name; });
+				
+				//Target line
+				legendFate.append('line')
+					.attr("x1", careerLineLength/2-1)
+					.attr("y1", 0)
+					.attr("x2", careerLineLength/2)
+					.attr("y2", 0)
+					.attr("stroke-width", timelineStroke)
+					.attr("stroke", colorSunk)
+					.attr("shape-rendering","crispEdges")
+					.attr('transform', function(d, i) {
+						var height = timelineStroke + legendSpacing;
+						var horz = -2 * timelineStroke+24;
+						var vert = 3 * height+legendOffset;
+						return 'translate(' + horz + ',' + vert + ')';
+					});
+					
 			}
 			
 // Draw Legend Fate
