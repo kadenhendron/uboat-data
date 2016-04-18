@@ -175,6 +175,10 @@ table, th, td {
   shape-rendering: crispEdges;
 }
 
+#target-container {
+	pointer-events: none;
+}
+
 div.annotation {
 	position: absolute;			
 	text-align: left;

@@ -60,11 +60,14 @@
 			width = document.getElementById('chart').offsetWidth - margin.left - margin.right,
 			height = uboatNum*(timelineStroke+timelineSpacing);
 			
-			var colorOrdered = "#cccccc",
+			var colorOrdered = "#ccc",
+				colorOrderedHover = "#bbb",
 				colorLaidDown = "#aaaaaa",
+				colorLaidDownHover = "#999",
 				colorLaunched = "#789dcd",
+				colorLaunchedHover = "#5e8cc9",
 				colorSunk = "#3670bc",
-				colorDecommissioned = "#888888",
+				colorDecommissioned = "#888",
 				colorScuttled = "#555555",
 				colorMissing = "green",
 				colorSurrendered = "white",
@@ -238,7 +241,7 @@
 					.attr("stroke-width", timelineStroke)
 					.attr("stroke", colorOrdered)
 					.on("mouseover", function(d) {	
-						d3.select(this).attr("stroke", "#aaa")
+						d3.select(this).attr("stroke", colorOrderedHover)
 						tooltip.transition()		
 							.duration(50)		
 							.style("opacity", 1);
@@ -274,7 +277,7 @@
 					.attr("stroke-width", timelineStroke)
 					.attr("stroke", colorLaidDown)
 					.on("mouseover", function(d) {
-						d3.select(this).attr("stroke", "#888")
+						d3.select(this).attr("stroke", colorLaidDownHover)
 						tooltip.transition()		
 							.duration(50)		
 							.style("opacity", 1);
@@ -283,7 +286,8 @@
 								"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Laid Down " 
 								+ d.laid_down + "</td></tr><tr><td colspan='2'> Launched "
 								+ d.launched +  "</td></tr><tr><td colspan='2'>"
-								+ dayDistance + " days under construction</td></tr>"
+								+ dayDistance + " days under construction</td></tr><tr><td colspan='2'>"
+								+ d.shipyard + "</td></tr>"
 								);
 					})					
 					.on("mouseout", function(d) {
@@ -310,7 +314,7 @@
 					.attr("class","launched-line")
 					.on("mouseover", function(d) {
 						
-						d3.select(this).attr("stroke", "#5980B3")
+						d3.select(this).attr("stroke", colorLaunchedHover)
 						
 						tooltip.transition()		
 							.duration(50)		
@@ -326,7 +330,7 @@
 								);
 					})					
 					.on("mouseout", function(d) {
-						d3.select(this).attr("stroke", "#789dcd")
+						d3.select(this).attr("stroke", colorLaunched)
 						tooltip.transition()		
 							.duration(50)		
 							.style("opacity", 0);
@@ -385,7 +389,8 @@
 						
 						tooltip.html(								
 								"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'>"
-								+ d.fate_type + " on " + d.fate +  "</td></tr>"
+								+ d.fate_type + " on " + d.fate +  "</td></tr><tr><td colspan='2'>"
+								+ d.fate_survivors + " survivors, " + d.fate_dead + " killed</td></tr>"
 								);
 					})					
 					.on("mouseout", function(d) {		
@@ -410,6 +415,10 @@
 			
 				}
 			
+				d3.csv("data/uboat-target-data.csv", function(error, data) {
+					drawTargets(data);
+				});
+			
 				function drawTargets(data) {
 			
 					$('#target-container').empty();
@@ -425,8 +434,8 @@
 							.attr("y1", function(d) { return y(d.name); })
 							.attr("x2", function(d) { return x(getAttackDate(d))+1 })
 							.attr("y2", function(d) { return y(d.name); })
-							.attr("stroke-width", 10)
-							.attr("stroke", "#3670bc")
+							.attr("stroke-width", timelineStroke)
+							.attr("stroke", colorSunk)
 							.attr("shape-rendering","crispEdges");
 				}
 		</script>

@@ -133,23 +133,27 @@ table, th, td {
   shape-rendering: crispEdges; }
 
 /* line 178, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+#target-container {
+  pointer-events: none; }
+
+/* line 182, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 div.annotation {
   position: absolute;
   text-align: left;
   top: 0;
   color: #e75b5c; }
 
-/* line 185, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 189, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .sticky {
   position: fixed; }
 
-/* line 189, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 193, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .target {
   float: left;
   background-color: #999;
   margin: 3px; }
 
-/* line 195, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 199, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .year {
   fill: none;
   stroke: black;
