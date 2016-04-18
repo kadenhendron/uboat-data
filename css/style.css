@@ -13,7 +13,7 @@
   src: url("../fonts/mono.eot");
   src: url("../fonts/mono.eot?#iefix") format("embedded-opentype"), url("../fonts/mono.woff") format("woff"), url("../fonts/mono.ttf") format("truetype"), url("../fonts/mono.svg#bold") format("svg"); }
 
-/* line 52, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 52, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 html {
   background-color: #eee;
   margin: 0;
@@ -21,7 +21,7 @@ html {
   max-width: 1400px;
   margin: 0 auto; }
 
-/* line 59, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 59, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 body {
   position: relative;
   font-family: "mono", Helvetica, sans-serif;
@@ -32,51 +32,58 @@ body {
   margin: 0 auto 160px;
   max-width: 1400px; }
   @media screen and (max-width: 568px) {
-    /* line 59, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+    /* line 59, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
     body {
       padding: 0 15px; } }
 
-/* line 72, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 72, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 h1, h2, h3, h4, h5, h6, p {
   margin: 0;
   padding: 0; }
 
-/* line 78, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 77, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 #description {
-  font-family: "Arnhem";
   width: 600px;
   margin: 60px auto 60px; }
-  /* line 83, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+  /* line 81, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
   #description h2 {
+    font-family: "bold", Helvetica, sans-serif;
     margin-bottom: 12px; }
-  /* line 87, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+  /* line 86, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
   #description p {
-    font-weight: 100;
+    font-family: "regular", Helvetica, sans-serif;
     font-size: 16px;
     line-height: 26px; }
 
-/* line 94, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
-#legend {
-  border: 2px solid #666;
-  padding: 12px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 200px;
-  font-size: 12px; }
-
-/* line 105, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 92, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 #chart-container {
   position: relative; }
 
-/* line 109, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 96, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 #chart {
   position: relative;
   margin-right: 240px;
   font-size: 12px; }
 
-/* line 115, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
-.tooltip {
+/* line 102, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+#legend {
+  border: 2px solid #666;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 200px;
+  font-size: 12px;
+  text-align: left; }
+  /* line 111, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+  #legend th {
+    font-size: 16px;
+    padding: 12px; }
+  /* line 116, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+  #legend td {
+    padding: 12px; }
+
+/* line 125, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+#tooltip {
   position: fixed;
   text-align: left;
   background: #fff;
@@ -86,62 +93,63 @@ h1, h2, h3, h4, h5, h6, p {
   opacity: 0;
   font-size: 12px; }
 
-/* line 126, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
-.tooltip tr:nth-child(1) td:nth-child(1) {
+/* line 136, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+#tooltip tr:nth-child(1) td:nth-child(1) {
   font-weight: bold; }
 
-/* line 133, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 143, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 table, th, td {
   border-collapse: collapse;
-  border: 1px solid #333; }
-
-/* line 138, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
-td {
+  border: 1px solid #333;
   padding: 8px; }
 
-/* line 142, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 149, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .x-axis-container {
   position: absolute;
   top: -8px;
   left: 0px;
   z-index: 5; }
 
-/* line 149, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 156, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .axis {
   color: #333; }
 
-/* line 153, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 160, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .x text {
   display: none; }
 
-/* line 157, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 164, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+.x {
+  pointer-events: none; }
+
+/* line 168, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .axis path {
   display: none; }
 
-/* line 161, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 172, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .axis line {
   fill: none;
   stroke: #ccc;
   shape-rendering: crispEdges; }
 
-/* line 167, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 178, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 div.annotation {
   position: absolute;
   text-align: left;
   top: 0;
   color: #e75b5c; }
 
-/* line 174, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 185, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .sticky {
   position: fixed; }
 
-/* line 178, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 189, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .target {
   float: left;
   background-color: #999;
   margin: 3px; }
 
-/* line 184, C:/Users/Kaden/Documents/School/Data Visualization/U-Boat Final/css/style.scss */
+/* line 195, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .year {
   fill: none;
   stroke: black;

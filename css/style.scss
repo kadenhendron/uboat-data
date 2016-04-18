@@ -70,38 +70,25 @@ body {
 }
 
 h1,h2,h3,h4,h5,h6, p {
-//	font-weight: normal;
-//	font-family: $bold;
+	
 	@include margin-padding-clear;
 }
 
 #description {
-	font-family: "Arnhem";
 	width: 600px;
 	margin: 60px auto 60px;
 	
 	h2 {
+		font-family: $bold;
 		margin-bottom:12px;
 	}
 	
 	p {
-		font-weight: 100;
+		font-family: $regular;
 		font-size: 16px;
 		line-height: 26px;
 	}
 }
-
-#legend {
-	border: 2px solid #666;
-	padding: 12px;
-	position: absolute;
-	right:0;
-	top:0;
-	width: 200px;
-	
-	font-size: 12px;
-}
-
 #chart-container {
 	position:relative;
 }
@@ -112,7 +99,30 @@ h1,h2,h3,h4,h5,h6, p {
 	font-size:12px;
 }
 
-.tooltip {
+#legend {
+	border: 2px solid #666;
+	position: absolute;
+	right:0;
+	top:0;
+	width: 200px;
+	font-size: 12px;
+	text-align: left;
+	
+	th {
+		font-size: 16px;
+		padding:12px;
+	}
+	
+	td {
+		padding:12px;
+	}
+	
+	#legend-fate {
+		
+	}
+}
+
+#tooltip {
 	position: fixed;
 	text-align: left;		
 	background: #fff;	
@@ -123,19 +133,16 @@ h1,h2,h3,h4,h5,h6, p {
 	font-size: 12px;
 }
 
-.tooltip tr:nth-child(1) td:nth-child(1) {
+#tooltip tr:nth-child(1) td:nth-child(1) {
 	font-weight: bold;
 }
 
-.tooltip tr:nth-child(1) td:nth-child(2) {
+#tooltip tr:nth-child(1) td:nth-child(2) {
 }
 
 table, th, td {
 	border-collapse: collapse;
 	border: 1px solid #333;
-}
-
-td {
 	padding:8px;
 }
 
@@ -152,6 +159,10 @@ td {
 
 .x text {
 	display: none;
+}
+
+.x {
+	pointer-events: none;
 }
 
 .axis path {

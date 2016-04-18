@@ -4,11 +4,9 @@
 		<title>U-Boat Timeline</title>
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/grid12.css">
-		<link rel="stylesheet" href="css/d3.slider.css" />  
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>		
 			<script>if (typeof jQuery === 'undefined') {document.write(unescape('js/jquery.js'));}</script>
 		<script src="js/d3.min.js" charset="utf-8"></script>
-		<script src="js/d3.slider.js" charset="utf-8"></script>
 		<script src="js/code.js" charset="utf-8"></script>	
 	</head>
 	
@@ -24,12 +22,13 @@
 			<div id="chart">
 	
 			</div>
-			<div id="legend">
-				<h3>Legend</h3>
-
-			</div>
+			<table id="legend">
+				<tr><th>Legend</th></tr>
+				<tr><td id="legend-fate"></td></tr>
+			</table>
 		</div>
-		<table class="tooltip"></table>
+		
+		<table id="tooltip"></table>
 		
 		<script>
 			
@@ -53,9 +52,27 @@
 				return new Date(d.attack_date);
 			}
 			
+			var uboatNum = 1153,
+				timelineStroke = 12,
+				timelineSpacing = 1;
+			
 			var margin = {top: 30, right: 20, bottom: 20, left: 60},
 			width = document.getElementById('chart').offsetWidth - margin.left - margin.right,
-			height = 15040 - margin.top - margin.bottom;
+			height = uboatNum*(timelineStroke+timelineSpacing);
+			
+			var colorOrdered = "#cccccc",
+				colorLaidDown = "#aaaaaa",
+				colorLaunched = "#789dcd",
+				colorSunk = "#3670bc",
+				colorDecommissioned = "#888888",
+				colorScuttled = "#555555",
+				colorMissing = "green",
+				colorSurrendered = "white",
+				colorCaptured = "red",
+				colorGrounded = "tan",
+				colorGiven = "purple",
+				colorDamaged = "cyan",
+				colorDestroyed = "orange";
 			
 			var svgContainer = d3.select("#chart")
 				.append("svg")
@@ -64,6 +81,22 @@
 				.append("g")
 					.attr("id","svg-container")
 					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			
+			var legend = d3.select("#legend-fate");
+			
+//			var legendSVG = legend
+//				.append("svg")
+//					.attr("width", 186)
+//					.attr("height", 400)
+//				.append("g")
+//					.attr("id","svg-legend");
+//			
+//			var legendLines = legend
+//				.append("line")
+//				.attr("x1", function(d) { return x(getLaidDownDate(d)) })
+//				.attr("y1", function(d) { return y(d.name); })
+//				.attr("x2", function(d) { return x(getLaunchDate(d)) })
+//				.attr("y2", function(d) { return y(d.name); });
 			
 			var timelineContainer = svgContainer
 				.append("g")
@@ -90,16 +123,15 @@
 
 			var	x = d3.time.scale().domain([minDate, maxDate]).range([0, width]);
 			
-			var tooltip = d3.select(".tooltip");
+			var tooltip = d3.select("#tooltip");
 				var tooltip_left = 50, tooltip_top = 35;
 			
 			window.onmousemove = function (e) {
 				var mousex = e.clientX,
 					mousey = e.clientY;
-				$(".tooltip").css( "top", (mousey + 20) + 'px' );
-				$(".tooltip").css( "left", (mousex + 20) + 'px' );
+				$("#tooltip").css( "top", (mousey + 20) + 'px' );
+				$("#tooltip").css( "left", (mousex + 20) + 'px' );
 			};
-			
 			
 			var xAxisBackground = xAxisContainer.append("g")
 				.attr("class", "x-axis-background")
@@ -151,7 +183,7 @@
 				
 			var xAxis = d3.svg.axis()
 				.scale(x)
-				.tickSize(-(height-margin.top-margin.bottom), 0, 0)
+				.tickSize(-(height), 0, 0)
 				.orient("top");
 
 			var yAxis = d3.svg.axis()
@@ -203,8 +235,8 @@
 					.attr("y1", function(d) { return y(d.name); })
 					.attr("x2", function(d) { return x(getLaidDownDate(d)) })
 					.attr("y2", function(d) { return y(d.name); })
-					.attr("stroke-width", 10)
-					.attr("stroke", "#ddd")
+					.attr("stroke-width", timelineStroke)
+					.attr("stroke", colorOrdered)
 					.on("mouseover", function(d) {	
 						d3.select(this).attr("stroke", "#aaa")
 						tooltip.transition()		
@@ -219,7 +251,7 @@
 								);
 					})					
 					.on("mouseout", function(d) {
-						d3.select(this).attr("stroke", "#ddd")
+						d3.select(this).attr("stroke", colorOrdered)
 						tooltip.transition()		
 							.duration(50)		
 							.style("opacity", 0);
@@ -239,8 +271,8 @@
 					.attr("y1", function(d) { return y(d.name); })
 					.attr("x2", function(d) { return x(getLaunchDate(d)) })
 					.attr("y2", function(d) { return y(d.name); })
-					.attr("stroke-width", 10)
-					.attr("stroke", "#bbb")
+					.attr("stroke-width", timelineStroke)
+					.attr("stroke", colorLaidDown)
 					.on("mouseover", function(d) {
 						d3.select(this).attr("stroke", "#888")
 						tooltip.transition()		
@@ -255,7 +287,7 @@
 								);
 					})					
 					.on("mouseout", function(d) {
-						d3.select(this).attr("stroke", "#bbb")
+						d3.select(this).attr("stroke", colorLaidDown)
 						tooltip.transition()		
 							.duration(50)		
 							.style("opacity", 0);
@@ -273,8 +305,8 @@
 					.attr("y1", function(d) { return y(d.name); })
 					.attr("x2", function(d) { return x(getFateDate(d)) })
 					.attr("y2", function(d) { return y(d.name); })
-					.attr("stroke-width", 10)
-					.attr("stroke", "#789dcd")
+					.attr("stroke-width", timelineStroke)
+					.attr("stroke", colorLaunched)
 					.attr("class","launched-line")
 					.on("mouseover", function(d) {
 						
@@ -310,38 +342,38 @@
 					.append("circle")
 					.attr("cx", function (d) { return x(getFateDate(d)); })
 					.attr("cy", function (d) { return y(d.name); })
-					.attr("r", 5)
+					.attr("r", timelineStroke/2)
 					.attr("fill", function(d) {
 						switch (d.fate_type) {
 						case "Sunk":
-							return "#3670bc"
+							return colorSunk
 							break;
 						case "Decommissioned":
-							return "grey"
+							return colorDecommissioned
 							break;
 						case "Scuttled":
-							return "yellow"
+							return colorScuttled
 							break;
 						case "Missing":
-							return "green"
+							return colorMissing
 							break;
 						case "Surrendered":
-							return "white"
+							return colorSurrendered
 							break;
 						case "Captured":
-							return "red"
+							return colorCaptured
 							break;
 						case "Grounded":
-							return "tan"
+							return colorGrounded
 							break;
 						case "Given":
-							return "purple"
+							return colorGiven
 							break;
 						case "Damaged":
-							return "cyan"
+							return colorDamaged
 							break;
 						case "Destroyed":
-							return "orange"
+							return colorDestroyed
 							break;
 						}
 					})

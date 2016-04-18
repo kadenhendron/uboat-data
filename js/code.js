@@ -6,8 +6,6 @@ $( document ).ready(function() {
 		var isPositionFixed = ($el.css('position') == 'fixed');
 		var left_offset = $("#chart-container").offset().left;
 		var right_offset = ($(window).width() - ($("#chart-container").offset().left + $("#chart-container").outerWidth()));
-		
-		console.log(right_offset);
 
 		if ($(this).scrollTop() > offset && !isPositionFixed){ 
 			$('.x-axis-container').css({'position': 'fixed', 'top': '0px', 'left': left_offset });
