@@ -86,30 +86,33 @@ h1, h2, h3, h4, h5, h6, p {
 
 /* line 116, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 #legend {
+  position: absolute;
+  top: 6px;
+  right: 0;
   margin: 0 0 20px; }
 
-/* line 120, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 123, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 #legend, #filter {
   border: 2px solid #666;
   right: 0;
   width: 200px;
   text-align: left;
   background-color: #eee; }
-  /* line 130, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+  /* line 133, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
   #legend th, #filter th {
     font-size: 16px;
     padding: 12px; }
-  /* line 135, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+  /* line 138, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
   #legend td, #filter td {
     font-size: 14px;
     padding: 12px 12px 6px; }
-    /* line 139, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+    /* line 142, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
     #legend td h3, #filter td h3 {
       position: relative;
       font-weight: bold;
       font-size: 14px;
       margin: 0 0 4px; }
-      /* line 145, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+      /* line 148, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
       #legend td h3 span, #filter td h3 span {
         font-weight: normal;
         position: absolute;
@@ -118,7 +121,7 @@ h1, h2, h3, h4, h5, h6, p {
         font-size: 14px;
         text-align: right; }
 
-/* line 158, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 161, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 #tooltip {
   position: fixed;
   text-align: left;
@@ -129,74 +132,74 @@ h1, h2, h3, h4, h5, h6, p {
   opacity: 0;
   font-size: 12px; }
 
-/* line 169, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 172, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 #tooltip tr:nth-child(1) td:nth-child(1) {
   font-weight: bold; }
 
-/* line 176, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 179, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 table, th, td {
   border-collapse: collapse;
   border: 1px solid #333;
   padding: 8px; }
 
-/* line 182, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 185, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .x-axis-container {
   position: absolute;
   top: -8px;
   left: 0px;
   z-index: 5; }
 
-/* line 189, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 192, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .axis {
   color: #333; }
 
-/* line 193, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 196, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .x text {
   display: none; }
 
-/* line 197, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 200, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .x {
   pointer-events: none; }
 
-/* line 201, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 204, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .axis path {
   display: none; }
 
-/* line 205, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 208, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .axis line {
   fill: none;
   stroke: #ccc;
   shape-rendering: crispEdges; }
 
-/* line 211, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 214, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 #target-container {
   pointer-events: none; }
 
-/* line 215, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 218, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 div.annotation {
   position: absolute;
   text-align: left;
   top: 0;
   color: #e75b5c; }
 
-/* line 222, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 225, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .sticky {
   position: fixed; }
 
-/* line 226, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 229, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .target {
   float: left;
   background-color: #999;
   margin: 3px; }
 
-/* line 232, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 235, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .year {
   fill: none;
   stroke: black;
   shape-rendering: crispEdges;
   display: none; }
 
-/* line 239, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 242, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 select {
   border: 1px solid #333;
   background: transparent;
@@ -207,13 +210,13 @@ select {
   -moz-appearance: none;
   appearance: none;
   background: url(http://www.stackoverflow.com/favicon.ico) 96%/15% no-repeat #eee; }
-  /* line 252, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+  /* line 255, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
   select option {
     padding: 10px; }
 
 /*target Internet Explorer 9 and Internet Explorer 10:*/
 @media screen and (min-width: 0 \0) {
-  /* line 259, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+  /* line 262, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
   select {
     background: none;
     padding: 5px; } }
