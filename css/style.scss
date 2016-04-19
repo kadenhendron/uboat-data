@@ -27,7 +27,7 @@
 
 $bold: 'bold', Helvetica, sans-serif;
 $regular: 'regular', Helvetica, sans-serif;
-$mono: 'mono', Helvetica, sans-serif;
+$mono: "GT Pressura Mono", Helvetica, sans-serif;
 
 $primary-color: yellow;
 $text-color: #333;
@@ -114,10 +114,14 @@ h1,h2,h3,h4,h5,h6, p {
 }
 
 #legend {
+	margin: 0 0 20px;
+}
+
+#legend, #filter {
 	border: 2px solid #666;
-	position: absolute;
+	//position: absolute;
 	right:0;
-	top:0;
+	//top:0;
 	width: 200px;
 	text-align: left;
 	background-color: $background-color;
@@ -230,4 +234,30 @@ div.annotation {
 	stroke: black;
   	shape-rendering: crispEdges;
 	display: none;
+}
+
+select {
+	border: 1px solid #333;
+	background: transparent;
+	width: 150px;
+	padding: 10px;
+	font-family: $mono;
+	
+	//height: 34px;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background: url(http://www.stackoverflow.com/favicon.ico) 96% / 15% no-repeat #eee;
+	
+	option {
+		padding: 10px;
+	}
+}
+/*target Internet Explorer 9 and Internet Explorer 10:*/
+
+@media screen and (min-width: 0\0) {
+  select {
+    background: none;
+    padding: 5px;
+  }
 }

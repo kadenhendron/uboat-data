@@ -25,21 +25,42 @@
 			<div id="chart">
 	
 			</div>
-			<table id="legend">
-				<tr><th>Legend</th></tr>
-				<tr>
-					<td id="legend-career">
-						<h3>Career</h3>
-					</td>
-				</tr>
-				<tr>
-					<td id="legend-fate">
-						<h3>Fate 
-							<span>Ship Count</span>
-						</h3>
-					</td>
-				</tr>
-			</table>
+			<div id="side-content">
+				<table id="legend">
+					<tr><th>Legend</th></tr>
+					<tr>
+						<td id="legend-career">
+							<h3>Career</h3>
+						</td>
+					</tr>
+					<tr>
+						<td id="legend-fate">
+							<h3>Fate 
+								<span>Ship Count</span>
+							</h3>
+						</td>
+					</tr>
+				</table>
+
+				<table id="filter">
+					<tr><th>Filter</th></tr>
+					<tr>
+						<td id="legend-career">
+							<h3>Type</h3>
+							<div id="dropdown">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td id="legend-fate">
+							<h3>Fate 
+								<span>Ship Count</span>
+								
+							</h3>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 		
 		<table id="tooltip"></table>
@@ -196,9 +217,6 @@
 				.orient("left");
 
 			
-			var dropdown = d3.select("#dropdown").append("select")
-                    .attr("name", "country-list");
-			
 //DATA DRAW FUNCTION
 			
 			d3.csv("data/uboat-data.csv", function(error, data) {
@@ -222,14 +240,15 @@
 				drawTimeline(data);
 				drawLegendCareer();
 				drawLegendFate(data);
+				drawTypeFilter(data);
 			});
 			
 // Draw Legend Career
 			
 			var legendSpacing = 8,
-				legendWidth = 186
+				legendWidth = 172
 				legendOffset = 10
-				careerLineLength = 17;
+				careerLineLength = 16;
 			
 			function drawLegendCareer() {
 
@@ -276,7 +295,7 @@
 				legendFate.append('line')
 					.attr("x1", careerLineLength/2-1)
 					.attr("y1", 0)
-					.attr("x2", careerLineLength/2)
+					.attr("x2", careerLineLength/2+1)
 					.attr("y2", 0)
 					.attr("stroke-width", timelineStroke)
 					.attr("stroke", colorSunk)
@@ -370,6 +389,51 @@
 					.attr('text-anchor', 'end')
 					.text(function(d) { return d.values; });
 			}
+			
+// Draw Type Filter
+			
+			function drawTypeFilter(data) {
+				
+				var shipTypeCount = d3.nest()
+					.key(function(d) { return d.type; })
+					.rollup(function(v) { return v.length; })
+					.entries(data);
+							
+				//shipTypeCount.sort(function(a,b) {return b.values-a.values;});
+				
+				var dropdown = d3.select("#dropdown").append("select")
+					//.attr("name", "country-list")=
+					.selectAll("option")
+					.data(shipTypeCount)
+					.enter()
+					.append("option")
+					.text(function(d) {return d.key;});
+					
+				}
+			
+				d3.select("select").on("change", function() {
+					console.log("Hello!");
+
+					d3.selectAll('circle')
+						// if a data point is selected highlight other 
+						// data points of the same color
+						.style('fill', function(d, i) { 
+							if (d.label == key) 
+							{return fill_arr[key]}
+							else {return "#ccc"}
+						;})
+//						var selected = this.value;
+//						displayOthers = this.checked ? "inline" : "none";
+//						display = this.checked ? "none" : "inline";
+//
+//						launchedLines.selectAll("line")
+//						  .filter(function(d) {return selected != d.type;})
+//						  .attr("display", displayOthers);
+//
+//						launchedLines.selectAll("line")
+//						  .filter(function(d) {return selected == d.type;})
+//						  .attr("display", display);
+				});
 			
 			function drawTimeline(data) {
 				
@@ -567,19 +631,19 @@
 							.style("opacity", 0);
 					});
 				
-					dropdown.on("change", function() {
-					  var selected = this.value;
-					  displayOthers = this.checked ? "inline" : "none";
-					  display = this.checked ? "none" : "inline";
-					
-					  launchedLines.selectAll("line")
-						  .filter(function(d) {return selected != d.type;})
-						  .attr("display", displayOthers);
-
-					  launchedLines.selectAll("line")
-						  .filter(function(d) {return selected == d.type;})
-						  .attr("display", display);
-					});
+//					dropdown.on("change", function() {
+//					  var selected = this.value;
+//					  displayOthers = this.checked ? "inline" : "none";
+//					  display = this.checked ? "none" : "inline";
+//					
+//					  launchedLines.selectAll("line")
+//						  .filter(function(d) {return selected != d.type;})
+//						  .attr("display", displayOthers);
+//
+//					  launchedLines.selectAll("line")
+//						  .filter(function(d) {return selected == d.type;})
+//						  .attr("display", display);
+//					});
 			
 				}
 			
