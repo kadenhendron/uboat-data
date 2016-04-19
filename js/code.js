@@ -1,6 +1,6 @@
 $( document ).ready(function() {
 	var $el = $('.x-axis-container'); 
-	var offset = $el.offset().top;\
+	var offset = $el.offset().top;
 	
 	var isPositionFixed = ($el.css('position') == 'fixed');
 		var left_offset = $("#chart-container").offset().left;
