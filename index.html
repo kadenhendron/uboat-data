@@ -567,8 +567,6 @@
 							switch (d.fate_type) {
 								case "Sunk":
 								case "Captured":
-								case "Grounded":
-								case "Damaged":
 								case "Destroyed":
 								case "Missing":
 									return "<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'>"
@@ -578,6 +576,8 @@
 								case "Decommissioned":
 								case "Scuttled":
 								case "Surrendered":
+								case "Grounded":
+								case "Damaged":
 								case "Given":
 									return "<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'>"
 											+ d.fate_type + " on " + d.fate +  "</td></tr>"
