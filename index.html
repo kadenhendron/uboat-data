@@ -42,24 +42,31 @@
 					</tr>
 				</table>
 
+<!--
 				<table id="filter">
 					<tr><th>Filter</th></tr>
 					<tr>
-						<td id="legend-career">
+						<td>
 							<h3>Type</h3>
-							<div id="dropdown">
+								<div id="dropdown-type">
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<td id="legend-fate">
-							<h3>Fate 
-								<span>Ship Count</span>
-								
+						<td>
+							<h3>Name 
+								<input type="text" id="name-input">
 							</h3>
 						</td>
 					</tr>
+					
+					<tr>
+						<td>
+							<input type="button" id="filter-button" value="Filter Data">
+						</td>
+					</tr>
 				</table>
+-->
 			</div>
 		</div>
 		
@@ -240,7 +247,7 @@
 				drawTimeline(data);
 				drawLegendCareer();
 				drawLegendFate(data);
-				drawTypeFilter(data);
+//				drawFilter(data);
 			});
 			
 // Draw Legend Career
@@ -389,51 +396,6 @@
 					.attr('text-anchor', 'end')
 					.text(function(d) { return d.values; });
 			}
-			
-// Draw Type Filter
-			
-			function drawTypeFilter(data) {
-				
-				var shipTypeCount = d3.nest()
-					.key(function(d) { return d.type; })
-					.rollup(function(v) { return v.length; })
-					.entries(data);
-							
-				//shipTypeCount.sort(function(a,b) {return b.values-a.values;});
-				
-				var dropdown = d3.select("#dropdown").append("select")
-					//.attr("name", "country-list")=
-					.selectAll("option")
-					.data(shipTypeCount)
-					.enter()
-					.append("option")
-					.text(function(d) {return d.key;});
-					
-				}
-			
-				d3.select("select").on("change", function() {
-					console.log("Hello!");
-
-					d3.selectAll('circle')
-						// if a data point is selected highlight other 
-						// data points of the same color
-						.style('fill', function(d, i) { 
-							if (d.label == key) 
-							{return fill_arr[key]}
-							else {return "#ccc"}
-						;})
-//						var selected = this.value;
-//						displayOthers = this.checked ? "inline" : "none";
-//						display = this.checked ? "none" : "inline";
-//
-//						launchedLines.selectAll("line")
-//						  .filter(function(d) {return selected != d.type;})
-//						  .attr("display", displayOthers);
-//
-//						launchedLines.selectAll("line")
-//						  .filter(function(d) {return selected == d.type;})
-//						  .attr("display", display);
-				});
 			
 			function drawTimeline(data) {
 				
@@ -630,20 +592,6 @@
 							.duration(50)		
 							.style("opacity", 0);
 					});
-				
-//					dropdown.on("change", function() {
-//					  var selected = this.value;
-//					  displayOthers = this.checked ? "inline" : "none";
-//					  display = this.checked ? "none" : "inline";
-//					
-//					  launchedLines.selectAll("line")
-//						  .filter(function(d) {return selected != d.type;})
-//						  .attr("display", displayOthers);
-//
-//					  launchedLines.selectAll("line")
-//						  .filter(function(d) {return selected == d.type;})
-//						  .attr("display", display);
-//					});
 			
 				}
 			
@@ -670,6 +618,99 @@
 							.attr("stroke", colorSunk)
 							.attr("shape-rendering","crispEdges");
 				}
+			
+//			d3.select('#slider3').call(d3.slider().axis(true).value( [ 1934, 1946 ] ).on("slide", function(evt, value) {
+//				updateDate(value[ 0 ], value[ 1 ]);
+//			}));
+//			
+//			updateDate(1934, 1946);
+			
+			
+//// Draw Type Filter
+//			
+//			function drawFilter(data) {
+//				
+//				var shipTypeCount = d3.nest()
+//					.key(function(d) { return d.type; })
+//					.rollup(function(v) { return v.length; })
+//					.entries(data);
+//							
+//				//shipTypeCount.sort(function(a,b) {return b.values-a.values;});
+//				
+//				var typeDropdown = d3.select("#dropdown-type")
+//					.append("select")
+//					.attr("id","dropdown-type-select");
+//				
+//				var typeDropdownOption = typeDropdown
+//					.selectAll("option")
+//					.data(shipTypeCount)
+//					.enter()
+//					.append("option")
+//					.text(function(d) {return d.key;});
+//				
+////				var nameInput = d3.select("#name-input");
+//				var nameInput = $("#name-input");
+//				
+//				var filterButton = d3.select("#filter-button")
+//					.on("click", function(d) {
+//					
+//						var typeIndex = $("#dropdown-type-select").selectedIndex;
+//						//var	selectedTypeName = shipTypeCount[selectedType];
+//						var	typeName = typeDropdown.options[typeIndex].text;
+//						
+//						//var selectedName = $("#name-input").value;
+//						
+//						console.log(typeIndex);
+//						//console.log(selectedName);
+//						console.log(typeName);
+//						
+////						redraw();
+//					})	
+//				
+//			}
+			
+//			function redraw() {
+//				
+//				
+//				
+//				drawTimeline(data);
+//				drawLegendCareer();
+//				drawLegendFate(data);
+//				drawTypeFilter(data);
+//			}
+//
+//			function updateDate(yearStart, yearEnd) {
+//				
+//				d3.select('#slider3textmin').text(yearStart);
+//				d3.select('#slider3textmax').text(yearEnd);
+//				
+//				var yearStartDate = new Date("1/1/"+yearStart.toString());
+//				var yearEndDate = new Date("1/1/"+yearEnd.toString());
+//				
+//				if (yearStartDate != yearEndDate ) {
+//					
+//					d3.csv("data/uboat-data.csv", function(error, data) {
+//
+//						x.domain([yearStartDate, yearEndDate]).range([0, width]);
+//
+//						var svg = d3.select("body").transition();
+//
+//						svg.select(".x.axis") // change the x axis
+//							.duration(750)
+//							.call(xAxis);
+//						svg.select(".x-axis-overlay") // change the x axis
+//							.duration(750)
+//							.call(xAxis);
+//					
+//						drawTimeline(data);
+//					});
+//					
+//					d3.csv("data/uboat-target-data.csv", function(error, data) {
+//						x.domain([yearStartDate, yearEndDate]).range([0, width]);
+//						drawTargets(data);
+//					});
+//				}
+//			}
 		</script>
 	</body>
 </html>
