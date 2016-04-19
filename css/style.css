@@ -9,9 +9,9 @@
   src: url("../fonts/regular.eot?#iefix") format("embedded-opentype"), url("../fonts/regular.woff") format("woff"), url("../fonts/regular.ttf") format("truetype"), url("../fonts/regular.svg#bold") format("svg"); }
 
 @font-face {
-  font-family: 'mono';
-  src: url("../fonts/mono.eot");
-  src: url("../fonts/mono.eot?#iefix") format("embedded-opentype"), url("../fonts/mono.woff") format("woff"), url("../fonts/mono.ttf") format("truetype"), url("../fonts/mono.svg#bold") format("svg"); }
+  font-family: 'mono2';
+  src: url("../fonts/mono2.eot");
+  src: url("../fonts/mono2.eot?#iefix") format("embedded-opentype"), url("../fonts/mono2.woff") format("woff"), url("../fonts/mono2.ttf") format("truetype"), url("../fonts/mono2.svg#bold") format("svg"); }
 
 /* line 52, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 html {
@@ -24,7 +24,7 @@ html {
 /* line 59, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 body {
   position: relative;
-  font-family: "GT Pressura Mono", Helvetica, sans-serif;
+  font-family: "mono2", Helvetica, sans-serif;
   color: #333;
   margin: 0;
   padding: 0;
@@ -202,7 +202,7 @@ select {
   background: transparent;
   width: 150px;
   padding: 10px;
-  font-family: "GT Pressura Mono", Helvetica, sans-serif;
+  font-family: "mono2", Helvetica, sans-serif;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;

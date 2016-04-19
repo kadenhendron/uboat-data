@@ -17,17 +17,17 @@
 }
 
 @font-face {
-    font-family: 'mono';
-    src: url('../fonts/mono.eot');
-    src: url('../fonts/mono.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/mono.woff') format('woff'),
-         url('../fonts/mono.ttf') format('truetype'),
-         url('../fonts/mono.svg#bold') format('svg');	 
+    font-family: 'mono2';
+    src: url('../fonts/mono2.eot');
+    src: url('../fonts/mono2.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/mono2.woff') format('woff'),
+         url('../fonts/mono2.ttf') format('truetype'),
+         url('../fonts/mono2.svg#bold') format('svg');	 
 }
 
 $bold: 'bold', Helvetica, sans-serif;
 $regular: 'regular', Helvetica, sans-serif;
-$mono: "GT Pressura Mono", Helvetica, sans-serif;
+$mono: 'mono2', Helvetica, sans-serif;
 
 $primary-color: yellow;
 $text-color: #333;
