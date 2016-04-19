@@ -168,11 +168,16 @@ d3.csv("data/uboat-data.csv", function(error, data) {
 		.attr("class", "y axis")
 		.call(yAxis);
 
-
+	
 	drawTimeline(data);
 	drawLegendCareer();
 	drawLegendFate(data);
-//				drawFilter(data);
+//	drawFilter(data);
+	
+	d3.csv("data/uboat-target-data.csv", function(error, data) {
+		drawTargets(data);
+	});
+
 });
 
 // Draw Legend Career
@@ -519,10 +524,6 @@ function drawTimeline(data) {
 		});
 
 	}
-
-	d3.csv("data/uboat-target-data.csv", function(error, data) {
-		drawTargets(data);
-	});
 
 	function drawTargets(data) {
 
