@@ -931,7 +931,7 @@
         </highlight>
       </viewpoint>
     </window>
-    <window class='worksheet' maximized='true' name='Fate Map'>
+    <window class='worksheet' name='Fate Map'>
       <cards>
         <edge name='left'>
           <strip size='160'>
@@ -996,7 +996,7 @@
         </highlight>
       </viewpoint>
     </window>
-    <window class='dashboard' name='Map'>
+    <window class='dashboard' maximized='true' name='Map'>
       <viewpoints>
         <viewpoint name='Fate Map'>
           <zoom type='entire-view' />
