@@ -23,7 +23,7 @@ var uboatNum = 1153,
 	timelineStroke = 12,
 	timelineSpacing = 1;
 
-var margin = {top: 30, right: 20, bottom: 20, left: 60},
+var margin = {top: 40, right: 20, bottom: 20, left: 60},
 width = document.getElementById('chart').offsetWidth - margin.left - margin.right,
 height = uboatNum*(timelineStroke+timelineSpacing);
 
@@ -44,7 +44,9 @@ var colorOrdered = "#ccc",
 	colorDamaged = "#42ba72",
 	colorDestroyed = "#df6f3e",
 	colorText = "#333",
-	colorTextLight = "#666";
+	colorTextLight = "#666"
+	colorWarMarkers = "#f28788"
+	;
 
 var svgContainer = d3.select("#chart")
 	.append("svg")
@@ -66,7 +68,7 @@ var xAxisContainer = d3.select("#chart")
 	.append("svg")
 		.attr("class", "x-axis-container")
 		.attr("width", width + margin.left + margin.right)
-		.attr("height", 40)
+		.attr("height", 50)
 	.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -96,46 +98,64 @@ var xAxisBackground = xAxisContainer.append("g")
 	.attr("x2", width+100)
 	.attr("y1", -12)
 	.attr("y2", -12)
-	.attr("stroke-width", 36)
+	.attr("stroke-width", 56)
 	.attr("stroke", "#eee");
 
-//			var markersGroup = svgContainer.append("g");
-//			var markersTextGroup = xAxisContainer.append("g");
-//			
-//			var wwiiStartMarker = markersGroup.append("line")
-//				.attr("x1", x(wwiiStart))
-//				.attr("y1", -12)
-//				.attr("x2", x(wwiiStart))
-//				.attr("y2", height)
-//				.attr("stroke-width", 1)
-//				.attr("shape-rendering","crispEdges")
-//				//.attr("stroke-dasharray", "2, 2")
-//				.attr("stroke", "#f28788");
-//			var wwiiStartMarkerText = markersTextGroup.append("div")
-//				.attr("class","annotation")
-//				.style("left", x(wwiiStart)+15 + "px")
-//				.style("top", 0 + "px")
-//				.text("WWII Begins");
-//			
-//			var wwiiEndMarker = markersGroup.append("line")	
-//				.attr("x1", function(d) { return x(wwiiEnd) })
-//				.attr("y1", -14)
-//				.attr("x2", function(d) { return x(wwiiEnd) })
-//				.attr("y2", height)
-//				.attr("stroke-width", 1)
-//				.attr("shape-rendering","crispEdges")
-//				//.attr("stroke-dasharray", "2, 2")
-//				.attr("stroke", "#f28788");
-//			var wwiiStartMarkerText = markersTextGroup.append("div")
-//				.attr("class","annotation")
-//				.style("left", x(wwiiEnd)+15 + "px")
-//				.style("top", 0 + "px")
-//				.text("WWII Ends");
+var markersGroup = svgContainer.append("g").
+	attr("id", "markers-group");
+var markersTextGroup = xAxisContainer.append("g");
 
-var xAxisOverlay = d3.svg.axis()
-	.scale(x)
-	.tickSize(0, 0, 0)
-	.orient("top");
+//Markers - Timeline section
+
+var wwiiStartMarker = markersGroup.append("line")
+	.attr("x1", x(wwiiStart))
+	.attr("y1", -12)
+	.attr("x2", x(wwiiStart))
+	.attr("y2", height)
+	.attr("stroke-width", 1)
+	.attr("shape-rendering","crispEdges")
+	.attr("stroke", colorWarMarkers);
+var wwiiEndMarker = markersGroup.append("line")	
+	.attr("x1", function(d) { return x(wwiiEnd) })
+	.attr("y1", -14)
+	.attr("x2", function(d) { return x(wwiiEnd) })
+	.attr("y2", height)
+	.attr("stroke-width", 1)
+	.attr("shape-rendering","crispEdges")
+	.attr("stroke", colorWarMarkers);
+
+//Markers - Top section
+
+var wwiiStartMarkerText = markersTextGroup.append("text")
+	.attr("class","wwii-marker-text")
+	.attr("x", x(wwiiStart))
+	.attr("y", -20)
+	.attr("fill", colorWarMarkers)
+	.attr("text-anchor", "middle")
+	.text("WWII Begins");
+var wwiiEndMarkerText = markersTextGroup.append("text")
+	.attr("class","wwii-marker-text")
+	.attr("x", x(wwiiEnd))
+	.attr("y", -20)
+	.attr("fill", colorWarMarkers)
+	.attr("text-anchor", "middle")
+	.text("WWII Ends");
+var wwiiStartMarkerTop = markersTextGroup.append("line")
+	.attr("x1", x(wwiiStart))
+	.attr("y1", -12)
+	.attr("x2", x(wwiiStart))
+	.attr("y2", 30)
+	.attr("stroke-width", 1)
+	.attr("shape-rendering","crispEdges")
+	.attr("stroke", colorWarMarkers);
+var wwiiEndMarkerTop = markersTextGroup.append("line")	
+	.attr("x1", function(d) { return x(wwiiEnd) })
+	.attr("y1", -14)
+	.attr("x2", function(d) { return x(wwiiEnd) })
+	.attr("y2", 30)
+	.attr("stroke-width", 1)
+	.attr("shape-rendering","crispEdges")
+	.attr("stroke", colorWarMarkers);
 
 var xAxis = d3.svg.axis()
 	.scale(x)
@@ -497,7 +517,6 @@ function drawTimeline(data) {
 				switch (d.fate_type) {
 					case "Sunk":
 					case "Captured":
-					case "Destroyed":
 					case "Missing":
 						return "<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'>"
 								+ d.fate_type + " on " + d.fate +  "</td></tr><tr><td colspan='2'>"
@@ -507,6 +526,7 @@ function drawTimeline(data) {
 					case "Scuttled":
 					case "Surrendered":
 					case "Grounded":
+					case "Destroyed":
 					case "Damaged":
 					case "Given":
 						return "<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'>"

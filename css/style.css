@@ -176,30 +176,34 @@ table, th, td {
   pointer-events: none; }
 
 /* line 218, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+#markers-group {
+  pointer-events: none; }
+
+/* line 222, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 div.annotation {
   position: absolute;
   text-align: left;
   top: 0;
   color: #e75b5c; }
 
-/* line 225, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 229, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .sticky {
   position: fixed; }
 
-/* line 229, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 233, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .target {
   float: left;
   background-color: #999;
   margin: 3px; }
 
-/* line 235, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 239, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 .year {
   fill: none;
   stroke: black;
   shape-rendering: crispEdges;
   display: none; }
 
-/* line 242, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 246, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 select {
   border: 1px solid #333;
   background: transparent;
@@ -210,13 +214,13 @@ select {
   -moz-appearance: none;
   appearance: none;
   background: url(http://www.stackoverflow.com/favicon.ico) 96%/15% no-repeat #eee; }
-  /* line 255, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+  /* line 259, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
   select option {
     padding: 10px; }
 
 /*target Internet Explorer 9 and Internet Explorer 10:*/
 @media screen and (min-width: 0 \0) {
-  /* line 262, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+  /* line 266, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
   select {
     background: none;
     padding: 5px; } }
