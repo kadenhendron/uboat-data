@@ -68,7 +68,7 @@ var xAxisContainer = d3.select("#chart")
 	.append("svg")
 		.attr("class", "x-axis-container")
 		.attr("width", width + margin.left + margin.right)
-		.attr("height", 50)
+		.attr("height", 48)
 	.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -157,9 +157,15 @@ var wwiiEndMarkerTop = markersTextGroup.append("line")
 	.attr("shape-rendering","crispEdges")
 	.attr("stroke", colorWarMarkers);
 
+var xAxisTop = d3.svg.axis()
+	.scale(x)
+	.tickSize(-20, 0)
+	.tickPadding(4)
+	.orient("top");
+
 var xAxis = d3.svg.axis()
 	.scale(x)
-	.tickSize(-(height), 0, 0)
+	.tickSize(-(height))
 	.orient("top");
 
 var yAxis = d3.svg.axis()
@@ -178,7 +184,7 @@ d3.csv("data/uboat-data.csv", function(error, data) {
 
 	var xAxisOverlayGroup = xAxisContainer.append("g")
 		.attr("class", "x-axis-overlay")
-		.call(xAxis);
+		.call(xAxisTop);
 
 	var xAxisGroup = svgContainer.append("g")
 		.attr("class", "x axis")

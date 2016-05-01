@@ -118,6 +118,7 @@ h1,h2,h3,h4,h5,h6, p {
 	top:6px;
 	right:0;
 	margin: 0 0 20px;
+	z-index: 3;
 }
 
 #legend, #filter {
@@ -186,7 +187,7 @@ table, th, td {
 	position:absolute;
 	top:-8px;
 	left: 0px;
-	z-index: 5;
+	z-index: 2;
 }
 
 .axis {			  
@@ -206,6 +207,12 @@ table, th, td {
 }
 
 .axis line {
+  fill: none;
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+.x-axis-overlay line {
   fill: none;
   stroke: #ccc;
   shape-rendering: crispEdges;
