@@ -191,6 +191,7 @@ d3.csv("data/uboat-data.csv", function(error, data) {
 	//data = data.sort( function(a, b) { return a.ordered - b.ordered ;} );
 	
 	//Sort by Launched Date
+	//data = data.sort( function(a, b) { return a.launched - b.launched ;} );
 	
 	//Sort by Fate Date
 	//data = data.sort( function(a, b) { return a.fate - b.fate ;} );
