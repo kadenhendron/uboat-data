@@ -1,23 +1,10 @@
+var format = d3.time.format("%B %e, %Y");
+//var format = d3.time.format("%x");
 
-function getOrderedDate(d) {
-	return new Date(d.ordered);
+function formatDate(dateToConvert) {
+	return format(new Date(dateToConvert));
 }
 
-function getLaidDownDate(d) {
-	return new Date(d.laid_down);
-}
-
-function getLaunchDate(d) {
-	return new Date(d.launched);
-}
-
-function getFateDate(d) {
-	return new Date(d.fate);
-}
-
-function getAttackDate(d) {
-	return new Date(d.attack_date);
-}
 
 var uboatNum = 1153,
 	timelineStroke = 12,
@@ -179,7 +166,35 @@ var yAxis = d3.svg.axis()
 
 d3.csv("data/uboat-data.csv", function(error, data) {
 	if (error) throw error;
-
+		
+	data.forEach(function(d) {
+		d.ordered = new Date(d.ordered);
+		d.laid_down = new Date(d.laid_down);
+		d.launched = new Date(d.launched);
+		d.fate = new Date(d.fate);
+		d.value = +d.value;
+	});
+	
+	//Sort by Ships Sunk
+	//data = data.sort(function(a,b) {return b.ships_sunk - a.ships_sunk;});
+	
+	//Sort by Type
+	//data = data.sort(function(a, b) { return d3.ascending(a.type, b.type); });
+	
+	//Sort by Fate Type
+	//data = data.sort(function(a, b) { return d3.ascending(a.fate_type, b.fate_type); });
+	
+	//Sort by Shipyard
+	//data = data.sort(function(a, b) { return d3.ascending(a.shipyard, b.shipyard); });
+	
+	//Sort by Ordered Date
+	//data = data.sort( function(a, b) { return a.ordered - b.ordered ;} );
+	
+	//Sort by Launched Date
+	
+	//Sort by Fate Date
+	//data = data.sort( function(a, b) { return a.fate - b.fate ;} );
+	
 	y.domain(data.map(function(d) { return d.name; }));
 
 	var xAxisOverlayGroup = xAxisContainer.append("g")
@@ -201,6 +216,11 @@ d3.csv("data/uboat-data.csv", function(error, data) {
 //	drawFilter(data);
 	
 	d3.csv("data/uboat-target-data.csv", function(error, data) {
+		data.forEach(function(d) {
+			d.attack_date = new Date(d.attack_date);
+			d.value = +d.value;
+		});
+		
 		drawTargets(data);
 	});
 
@@ -366,9 +386,9 @@ function drawTimeline(data) {
 		.enter()
 		.append("line")
 		.attr("class","ordered-line")
-		.attr("x1", function(d) { return x(getOrderedDate(d)) })
+		.attr("x1", function(d) { return x(d.ordered) })
 		.attr("y1", function(d) { return y(d.name); })
-		.attr("x2", function(d) { return x(getLaidDownDate(d)) })
+		.attr("x2", function(d) { return x(d.laid_down) })
 		.attr("y2", function(d) { return y(d.name); })
 		.attr("stroke-width", timelineStroke)
 		.attr("stroke", colorOrdered)
@@ -377,11 +397,11 @@ function drawTimeline(data) {
 			tooltip.transition()		
 				.duration(50)		
 				.style("opacity", 1);
-			dayDistance = Math.round((getLaidDownDate(d)-getOrderedDate(d))/86400000); //This is returning PIXELS, not actual DAYS
+			dayDistance = Math.round((d.laid_down-d.ordered)/86400000); //This is returning PIXELS, not actual DAYS
 			tooltip.html(								
 					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Ordered " 
-					+ d.ordered + "</td></tr><tr><td colspan='2'> Laid Down "
-					+ d.laid_down +  "</td></tr><tr><td colspan='2'>"
+					+ formatDate(d.ordered) + "</td></tr><tr><td colspan='2'> Laid Down "
+					+ formatDate(d.laid_down) +  "</td></tr><tr><td colspan='2'>"
 					+ dayDistance + " days before construction</td></tr>"
 					);
 		})					
@@ -402,9 +422,9 @@ function drawTimeline(data) {
 		.data(data)
 		.enter()
 		.append("line")
-		.attr("x1", function(d) { return x(getLaidDownDate(d)) })
+		.attr("x1", function(d) { return x(d.laid_down) })
 		.attr("y1", function(d) { return y(d.name); })
-		.attr("x2", function(d) { return x(getLaunchDate(d)) })
+		.attr("x2", function(d) { return x(d.launched) })
 		.attr("y2", function(d) { return y(d.name); })
 		.attr("stroke-width", timelineStroke)
 		.attr("stroke", colorLaidDown)
@@ -413,11 +433,11 @@ function drawTimeline(data) {
 			tooltip.transition()		
 				.duration(50)		
 				.style("opacity", 1);
-			dayDistance = Math.round((getLaunchDate(d)-getLaidDownDate(d))/86400000); //This is returning PIXELS, not actual DAYS
+			dayDistance = Math.round((d.launched-d.laid_down)/86400000); //This is returning PIXELS, not actual DAYS
 			tooltip.html(								
 					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Laid Down " 
-					+ d.laid_down + "</td></tr><tr><td colspan='2'> Launched "
-					+ d.launched +  "</td></tr><tr><td colspan='2'>"
+					+ formatDate(d.laid_down) + "</td></tr><tr><td colspan='2'> Launched "
+					+ formatDate(d.launched) +  "</td></tr><tr><td colspan='2'>"
 					+ dayDistance + " days under construction</td></tr><tr><td colspan='2'>Constructed at "
 					+ d.shipyard + "</td></tr>"
 					);
@@ -437,9 +457,9 @@ function drawTimeline(data) {
 		.data(data)
 		.enter()
 		.append("line")
-		.attr("x1", function(d) { return x(getLaunchDate(d)) })
+		.attr("x1", function(d) { return x(d.launched) })
 		.attr("y1", function(d) { return y(d.name); })
-		.attr("x2", function(d) { return x(getFateDate(d)) })
+		.attr("x2", function(d) { return x(d.fate) })
 		.attr("y2", function(d) { return y(d.name); })
 		.attr("stroke-width", timelineStroke)
 		.attr("stroke", colorLaunched)
@@ -451,12 +471,12 @@ function drawTimeline(data) {
 			tooltip.transition()		
 				.duration(50)		
 				.style("opacity", 1);
-			dayDistance = Math.round((getFateDate(d)-getLaunchDate(d))/86400000); //This is returning PIXELS, not actual DAYS
+			dayDistance = Math.round((d.fate-d.launched)/86400000); //This is returning PIXELS, not actual DAYS
 
 			tooltip.html(							
 					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Launched " 
-					+ d.ordered + "</td></tr><tr><td colspan='2'>"
-					+ d.fate_type + " " + d.fate +  "</td></tr><tr><td colspan='2'>"
+					+ formatDate(d.launched) + "</td></tr><tr><td colspan='2'>"
+					+ d.fate_type + " " + formatDate(d.fate) +  "</td></tr><tr><td colspan='2'>"
 					+ d.ships_sunk + " ships sunk</td></tr><tr><td colspan='2'>"
 					+ dayDistance + " days in service</td></tr>"
 					);
@@ -476,7 +496,7 @@ function drawTimeline(data) {
 		.data(data)
 		.enter()
 		.append("circle")
-		.attr("cx", function (d) { return x(getFateDate(d)); })
+		.attr("cx", function (d) { return x(d.fate); })
 		.attr("cy", function (d) { return y(d.name); })
 		.attr("r", timelineStroke/2)
 		.attr("fill", function(d) {
@@ -517,7 +537,7 @@ function drawTimeline(data) {
 			tooltip.transition()		
 				.duration(50)		
 				.style("opacity", 1);
-			dayDistance = Math.round((getFateDate(d)-getLaunchDate(d))/86400000); //This is returning PIXELS, not actual DAYS
+			dayDistance = Math.round((d.fate-d.launched)/86400000); //This is returning PIXELS, not actual DAYS
 
 			function getFateCasualties(d) {
 				switch (d.fate_type) {
@@ -525,7 +545,7 @@ function drawTimeline(data) {
 					case "Captured":
 					case "Missing":
 						return "<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'>"
-								+ d.fate_type + " on " + d.fate +  "</td></tr><tr><td colspan='2'>"
+								+ d.fate_type + " " + formatDate(d.fate) +  "</td></tr><tr><td colspan='2'>"
 								+ d.fate_survivors + " survivors, " + d.fate_dead + " dead</td></tr>"
 						break;
 					case "Decommissioned":
@@ -536,7 +556,7 @@ function drawTimeline(data) {
 					case "Damaged":
 					case "Given":
 						return "<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'>"
-								+ d.fate_type + " on " + d.fate +  "</td></tr>"
+								+ d.fate_type + " " + formatDate(d.fate) +  "</td></tr>"
 						break;
 				}
 			}
@@ -562,20 +582,20 @@ function drawTimeline(data) {
 			.data(data)
 			.enter()
 			.append("line")
-				.attr("x1", function(d) { return x(getAttackDate(d)) })
+				.attr("x1", function(d) { return x(d.attack_date) })
 				.attr("y1", function(d) { return y(d.name); })
-				.attr("x2", function(d) { return x(getAttackDate(d))+1 })
+				.attr("x2", function(d) { return x(d.attack_date)+1})
 				.attr("y2", function(d) { return y(d.name); })
 				.attr("stroke-width", timelineStroke)
 				.attr("stroke", colorSunk)
 				.attr("shape-rendering","crispEdges");
 	}
 
-//			d3.select('#slider3').call(d3.slider().axis(true).value( [ 1934, 1946 ] ).on("slide", function(evt, value) {
-//				updateDate(value[ 0 ], value[ 1 ]);
-//			}));
-//			
-//			updateDate(1934, 1946);
+//	d3.select('#slider3').call(d3.slider().axis(true).value( [ 1934, 1946 ] ).on("slide", function(evt, value) {
+//		updateDate(value[ 0 ], value[ 1 ]);
+//	}));
+//
+//	updateDate(1934, 1946);
 
 
 //// Draw Type Filter
