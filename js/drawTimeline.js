@@ -625,31 +625,31 @@ function sortData(data, sortOption) {
 	
 	switch (sortOption) {
 		case "shipName":
-			//data = data.sort(function(a, b) { return d3.ascending(a.name, b.name); });
+			data = data.sort(function(a, b) { return a.id - b.id ;} );
 			break;
 		case "shipType":
-			data = data.sort(function(a, b) { return d3.ascending(a.type, b.type); });
+			data = data.sort(function(a, b) { return d3.ascending(a.type, b.type) || a.id - b.id ; });
 			break;
 		case "orderedDate":
-			data = data.sort( function(a, b) { return a.ordered - b.ordered ;} );
+			data = data.sort( function(a, b) { return a.ordered - b.ordered || a.id - b.id ;} );
 			break;
 		case "laidDownDate":
-			data = data.sort( function(a, b) { return a.laid_down - b.laid_down ;} );
+			data = data.sort( function(a, b) { return a.laid_down - b.laid_down || a.id - b.id ;} );
 			break;
 		case "launchedDate":
-			data = data.sort( function(a, b) { return a.launched - b.launched ;} );
+			data = data.sort( function(a, b) { return a.launched - b.launched || a.id - b.id ;} );
 			break;
 		case "fateDate":
-			data = data.sort( function(a, b) { return a.fate - b.fate ;} );
+			data = data.sort(function(a, b) { return a.fate - b.fate || d3.ascending(a.fate_type, b.fate_type) || a.id - b.id ; })
 			break;
 		case "fateType":
-			data = data.sort(function(a, b) { return d3.ascending(a.fate_type, b.fate_type); });
+			data = data.sort(function(a, b) { return d3.ascending(a.fate_type, b.fate_type) || a.fate - b.fate || a.id - b.id ; })
 			break;
 		case "shipyard":
-			data = data.sort(function(a, b) { return d3.ascending(a.shipyard, b.shipyard); });
+			data = data.sort(function(a, b) { return d3.ascending(a.shipyard, b.shipyard) || a.laid_down - b.laid_down || a.id - b.id ; })
 			break;
 		case "shipsSunk":
-			data = data.sort(function(a,b) {return b.ships_sunk - a.ships_sunk;});
+			data = data.sort(function(a,b) {return b.ships_sunk - a.ships_sunk || a.launched - b.launched || a.id - b.id ;});
 			break;
 	};
 	
