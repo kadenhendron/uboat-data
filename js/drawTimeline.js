@@ -5,14 +5,13 @@ function formatDate(dateToConvert) {
 	return format(new Date(dateToConvert));
 }
 
-
 var uboatNum = 1153,
 	timelineStroke = 12,
 	timelineSpacing = 1;
 
 var margin = {top: 40, right: 20, bottom: 20, left: 60},
-width = document.getElementById('chart').offsetWidth - margin.left - margin.right,
-height = uboatNum*(timelineStroke+timelineSpacing);
+	width = document.getElementById('chart').offsetWidth - margin.left - margin.right,
+	height = uboatNum * (timelineStroke + timelineSpacing);
 
 var colorOrdered = "#ccc",
 	colorOrderedHover = "#bbb",
@@ -31,33 +30,8 @@ var colorOrdered = "#ccc",
 	colorDamaged = "#42ba72",
 	colorDestroyed = "#df6f3e",
 	colorText = "#333",
-	colorTextLight = "#666"
-	colorWarMarkers = "#f28788"
-	;
-
-var svgContainer = d3.select("#chart")
-	.append("svg")
-		.attr("width", width + margin.left + margin.right)
-		.attr("height", height + margin.top + margin.bottom)
-	.append("g")
-		.attr("id","svg-container")
-		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-var timelineContainer = svgContainer
-	.append("g")
-		.attr("id","timeline-container");
-
-var targetContainer = svgContainer
-	.append("g")
-		.attr("id","target-container");
-
-var xAxisContainer = d3.select("#chart")
-	.append("svg")
-		.attr("class", "x-axis-container")
-		.attr("width", width + margin.left + margin.right)
-		.attr("height", 48)
-	.append("g")
-		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	colorTextLight = "#666",
+	colorWarMarkers = "#f28788";
 
 var	minDate = new Date("1934"),
 	maxDate = new Date("1/1/1946"),
@@ -78,72 +52,6 @@ window.onmousemove = function (e) {
 	$("#tooltip").css( "left", (mousex + 20) + 'px' );
 };
 
-var xAxisBackground = xAxisContainer.append("g")
-	.attr("class", "x-axis-background")
-	.append("line")
-	.attr("x1", -100)
-	.attr("x2", width+100)
-	.attr("y1", -12)
-	.attr("y2", -12)
-	.attr("stroke-width", 56)
-	.attr("stroke", "#eee");
-
-var markersGroup = svgContainer.append("g").
-	attr("id", "markers-group");
-var markersTextGroup = xAxisContainer.append("g");
-
-//Markers - Timeline section
-
-var wwiiStartMarker = markersGroup.append("line")
-	.attr("x1", x(wwiiStart))
-	.attr("y1", -12)
-	.attr("x2", x(wwiiStart))
-	.attr("y2", height)
-	.attr("stroke-width", 1)
-	.attr("shape-rendering","crispEdges")
-	.attr("stroke", colorWarMarkers);
-var wwiiEndMarker = markersGroup.append("line")	
-	.attr("x1", function(d) { return x(wwiiEnd) })
-	.attr("y1", -14)
-	.attr("x2", function(d) { return x(wwiiEnd) })
-	.attr("y2", height)
-	.attr("stroke-width", 1)
-	.attr("shape-rendering","crispEdges")
-	.attr("stroke", colorWarMarkers);
-
-//Markers - Top section
-
-var wwiiStartMarkerText = markersTextGroup.append("text")
-	.attr("class","wwii-marker-text")
-	.attr("x", x(wwiiStart))
-	.attr("y", -20)
-	.attr("fill", colorWarMarkers)
-	.attr("text-anchor", "middle")
-	.text("WWII Begins");
-var wwiiEndMarkerText = markersTextGroup.append("text")
-	.attr("class","wwii-marker-text")
-	.attr("x", x(wwiiEnd))
-	.attr("y", -20)
-	.attr("fill", colorWarMarkers)
-	.attr("text-anchor", "middle")
-	.text("WWII Ends");
-var wwiiStartMarkerTop = markersTextGroup.append("line")
-	.attr("x1", x(wwiiStart))
-	.attr("y1", -12)
-	.attr("x2", x(wwiiStart))
-	.attr("y2", 30)
-	.attr("stroke-width", 1)
-	.attr("shape-rendering","crispEdges")
-	.attr("stroke", colorWarMarkers);
-var wwiiEndMarkerTop = markersTextGroup.append("line")	
-	.attr("x1", function(d) { return x(wwiiEnd) })
-	.attr("y1", -14)
-	.attr("x2", function(d) { return x(wwiiEnd) })
-	.attr("y2", 30)
-	.attr("stroke-width", 1)
-	.attr("shape-rendering","crispEdges")
-	.attr("stroke", colorWarMarkers);
-
 var xAxisTop = d3.svg.axis()
 	.scale(x)
 	.tickSize(-20, 0)
@@ -161,71 +69,98 @@ var yAxis = d3.svg.axis()
 	.tickPadding(10)
 	.orient("left");
 
-
-//DATA DRAW FUNCTION
-
-d3.csv("data/uboat-data.csv", function(error, data) {
-	if (error) throw error;
+function xAxisScroll() {
+	var $el =  $(".x-axis-container");
+	var offset = $el.offset().top;
+	
+	$(window).scroll(function(e){
 		
-	data.forEach(function(d) {
-		d.ordered = new Date(d.ordered);
-		d.laid_down = new Date(d.laid_down);
-		d.launched = new Date(d.launched);
-		d.fate = new Date(d.fate);
-		d.value = +d.value;
+		var isPositionFixed = ($el.css('position') == 'fixed');
+		var left_offset = $("#chart-container").offset().left;
+		var right_offset = ($(window).width() - ($("#chart-container").offset().left + $("#chart-container").outerWidth()));
+
+		if ($(this).scrollTop() > offset && !isPositionFixed){ 
+			$el.css({'position': 'fixed', 'top': '0px', 'left': left_offset });
+			$('#side-content').css({'position': 'fixed', 'top': '18px', 'right': right_offset });
+		}
+		if ($(this).scrollTop() < offset) {
+			$el.css({'position': 'absolute', 'top': '-8px', 'left': 0});
+			$('#side-content').css({'position': 'absolute', 'top': '6px', 'right': 0});
+		} 
 	});
 	
-	//Sort by Ships Sunk
-	//data = data.sort(function(a,b) {return b.ships_sunk - a.ships_sunk;});
-	
-	//Sort by Type
-	//data = data.sort(function(a, b) { return d3.ascending(a.type, b.type); });
-	
-	//Sort by Fate Type
-	//data = data.sort(function(a, b) { return d3.ascending(a.fate_type, b.fate_type); });
-	
-	//Sort by Shipyard
-	//data = data.sort(function(a, b) { return d3.ascending(a.shipyard, b.shipyard); });
-	
-	//Sort by Ordered Date
-	//data = data.sort( function(a, b) { return a.ordered - b.ordered ;} );
-	
-	//Sort by Launched Date
-	//data = data.sort( function(a, b) { return a.launched - b.launched ;} );
-	
-	//Sort by Fate Date
-	//data = data.sort( function(a, b) { return a.fate - b.fate ;} );
-	
-	y.domain(data.map(function(d) { return d.name; }));
-
-	var xAxisOverlayGroup = xAxisContainer.append("g")
-		.attr("class", "x-axis-overlay")
-		.call(xAxisTop);
-
-	var xAxisGroup = svgContainer.append("g")
-		.attr("class", "x axis")
-		.call(xAxis);
-
-	var yAxisGroup = svgContainer.append("g")
-		.attr("class", "y axis")
-		.call(yAxis);
-
-	
-	drawTimeline(data);
-	drawLegendCareer();
-	drawLegendFate(data);
-//	drawFilter(data);
-	
-	d3.csv("data/uboat-target-data.csv", function(error, data) {
-		data.forEach(function(d) {
-			d.attack_date = new Date(d.attack_date);
-			d.value = +d.value;
-		});
+	$(window).resize(function(){
 		
-		drawTargets(data);
+		var isPositionFixed = ($el.css('position') == 'fixed');
+		var left_offset = $("#chart-container").offset().left;
+		var right_offset = ($(window).width() - ($("#chart-container").offset().left + $("#chart-container").outerWidth()));
+		
+		if ($(this).scrollTop() > offset && !isPositionFixed){ 
+			$el.css({'position': 'fixed', 'top': '0px', 'left': left_offset });
+			$('#side-content').css({'position': 'fixed', 'top': '18px', 'right': right_offset });
+		}
 	});
+}
 
-});
+function drawWWIIMarkers(svgContainer, xAxisContainer) {
+	
+	var markersGroup = svgContainer.append("g").
+	attr("id", "markers-group");
+	
+	var markersTextGroup = xAxisContainer.append("g");
+
+	//Markers - Timeline section
+
+	var wwiiStartMarker = markersGroup.append("line")
+		.attr("x1", x(wwiiStart))
+		.attr("y1", -12)
+		.attr("x2", x(wwiiStart))
+		.attr("y2", height)
+		.attr("stroke-width", 1)
+		.attr("shape-rendering","crispEdges")
+		.attr("stroke", colorWarMarkers);
+	var wwiiEndMarker = markersGroup.append("line")
+		.attr("x1", function(d) { return x(wwiiEnd) })
+		.attr("y1", -14)
+		.attr("x2", function(d) { return x(wwiiEnd) })
+		.attr("y2", height)
+		.attr("stroke-width", 1)
+		.attr("shape-rendering","crispEdges")
+		.attr("stroke", colorWarMarkers);
+
+	//Markers - Top section
+
+	var wwiiStartMarkerText = markersTextGroup.append("text")
+		.attr("class","wwii-marker-text")
+		.attr("x", x(wwiiStart))
+		.attr("y", -20)
+		.attr("fill", colorWarMarkers)
+		.attr("text-anchor", "middle")
+		.text("WWII Begins");
+	var wwiiEndMarkerText = markersTextGroup.append("text")
+		.attr("class","wwii-marker-text")
+		.attr("x", x(wwiiEnd))
+		.attr("y", -20)
+		.attr("fill", colorWarMarkers)
+		.attr("text-anchor", "middle")
+		.text("WWII Ends");
+	var wwiiStartMarkerTop = markersTextGroup.append("line")
+		.attr("x1", x(wwiiStart))
+		.attr("y1", -12)
+		.attr("x2", x(wwiiStart))
+		.attr("y2", 30)
+		.attr("stroke-width", 1)
+		.attr("shape-rendering","crispEdges")
+		.attr("stroke", colorWarMarkers);
+	var wwiiEndMarkerTop = markersTextGroup.append("line")	
+		.attr("x1", function(d) { return x(wwiiEnd) })
+		.attr("y1", -14)
+		.attr("x2", function(d) { return x(wwiiEnd) })
+		.attr("y2", 30)
+		.attr("stroke-width", 1)
+		.attr("shape-rendering","crispEdges")
+		.attr("stroke", colorWarMarkers);
+}
 
 // Draw Legend Career
 
@@ -377,8 +312,8 @@ function drawLegendFate(data) {
 function drawTimeline(data) {
 
 	//ORDERED
-
-	$('#timeline-container').empty();
+	
+	timelineContainer = d3.select("#timeline-container");
 
 	var orderedLinesGroup = timelineContainer.append("g");
 
@@ -684,3 +619,125 @@ function drawTimeline(data) {
 //					});
 //				}
 //			}
+
+
+function sortData(data, sortType) {
+	//Sort by Ships Sunk
+	//data = data.sort(function(a,b) {return b.ships_sunk - a.ships_sunk;});
+
+	//Sort by Type
+	//data = data.sort(function(a, b) { return d3.ascending(a.type, b.type); });
+
+	//Sort by Fate Type
+	//data = data.sort(function(a, b) { return d3.ascending(a.fate_type, b.fate_type); });
+
+	//Sort by Shipyard
+	//data = data.sort(function(a, b) { return d3.ascending(a.shipyard, b.shipyard); });
+
+	//Sort by Ordered Date
+	//data = data.sort( function(a, b) { return a.ordered - b.ordered ;} );
+
+	//Sort by Launched Date
+	//data = data.sort( function(a, b) { return a.launched - b.launched ;} );
+
+	//Sort by Fate Date
+	//data = data.sort( function(a, b) { return a.fate - b.fate ;} );
+}
+
+//DATA PULL FUNCTION
+
+function runDraw() {
+	
+	d3.csv("data/uboat-data.csv", function(error, data) {
+		if (error) throw error;
+
+		data.forEach(function(d) {
+			d.ordered = new Date(d.ordered);
+			d.laid_down = new Date(d.laid_down);
+			d.launched = new Date(d.launched);
+			d.fate = new Date(d.fate);
+			d.value = +d.value;
+		});
+		
+		
+		//d3.select("#chart").hasChildNodes == false
+		if ( true ) {
+			var svgContainer = d3.select("#chart")
+				.append("svg")
+					.attr("id", "svg-container")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+			var timelineContainer = svgContainer
+				.append("g")
+				.attr("id", "timeline-container");
+
+			var targetContainer = svgContainer
+				.append("g")
+					.attr("id", "target-container");
+
+			var xAxisContainer = d3.select("#chart")
+				.append("svg")
+					.attr("class", "x-axis-container")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", 48)
+				.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			
+			xAxisScroll();
+
+			var xAxisBackground = xAxisContainer.append("g")
+					.attr("class", "x-axis-background")
+				.append("line")
+					.attr("x1", -100)
+					.attr("x2", width+100)
+					.attr("y1", -12)
+					.attr("y2", -12)
+					.attr("stroke-width", 56)
+					.attr("stroke", "#eee");
+
+			drawLegendCareer();
+			drawLegendFate(data);
+		}
+
+		y.domain(data.map(function(d) { return d.name; }));
+
+		var xAxisOverlayGroup = xAxisContainer.append("g")
+			.attr("class", "x-axis-overlay")
+			.call(xAxisTop);
+
+		var xAxisGroup = svgContainer.append("g")
+			.attr("class", "x axis")
+			.call(xAxis);
+
+		var yAxisGroup = svgContainer.append("g")
+			.attr("class", "y axis")
+			.call(yAxis);
+
+		drawTimeline(data);
+		drawWWIIMarkers(svgContainer, xAxisContainer);
+	//	drawFilter(data);
+
+		d3.csv("data/uboat-target-data.csv", function(error, data) {
+			data.forEach(function(d) {
+				d.attack_date = new Date(d.attack_date);
+				d.value = +d.value;
+			});
+
+			drawTargets(data);
+		});
+	});
+}
+
+runDraw();
+
+$('#redraw-button').click(function() {
+	
+	$('#chart').fadeOut('1000', function() {
+		$('#chart').empty();
+		runDraw();
+		$('#chart').fadeIn('1000');
+	});
+});
