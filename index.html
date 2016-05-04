@@ -10,7 +10,6 @@
 -->
 		<script src="js/jquery.js" charset="utf-8"></script>
 		<script src="js/d3.min.js" charset="utf-8"></script>
-		<script src="js/code.js" charset="utf-8"></script>	
 	</head>
 	
 	<body>
@@ -46,10 +45,32 @@
 					</tr>
 					<tr>
 						<td>
+							<select id="sort-options" name="sort-options">
+								<option value="shipName">Name</option>
+								<option value="shipType">Type</option>
+								<option value="orderedDate">Ordered Date</option>
+								<option value="laidDownDate">Laid Down Date</option>
+								<option value="launchedDate">Launched Date</option>
+								<option value="fateDate">Fate Date</option>
+								<option value="fateType">Fate Type</option>
+								<option value="shipyard">Shipyard</option>
+								<option value="shipsSunk">Ships Sunk</option>
+							</select>
+							
 							<input type="button" id="redraw-button" value="Filter Data">
 						</td>
 					</tr>
 				</table>
+				
+<!--
+				<table id="filter">
+					<tr><th>Filters</th></tr>
+					<tr>
+						<td>
+						</td>
+					</tr>
+				</table>
+-->
 			</div>
 		</div>
 		

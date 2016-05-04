@@ -70,7 +70,6 @@ body {
 }
 
 h1,h2,h3,h4,h5,h6, p {
-	
 	@include margin-padding-clear;
 }
 
@@ -249,29 +248,29 @@ div.annotation {
   	shape-rendering: crispEdges;
 	display: none;
 }
-
-select {
-	border: 1px solid #333;
-	background: transparent;
-	width: 150px;
-	padding: 10px;
-	font-family: $mono;
-	
-	//height: 34px;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	background: url(http://www.stackoverflow.com/favicon.ico) 96% / 15% no-repeat #eee;
-	
-	option {
-		padding: 10px;
-	}
-}
-/*target Internet Explorer 9 and Internet Explorer 10:*/
-
-@media screen and (min-width: 0\0) {
-  select {
-    background: none;
-    padding: 5px;
-  }
-}
+//
+//select {
+//	border: 1px solid #333;
+//	background: #fff;
+//	width: 150px;
+//	padding: 10px;
+//	font-family: $mono;
+//	
+//	//height: 34px;
+//	-webkit-appearance: none;
+//	-moz-appearance: none;
+//	appearance: none;
+//	//background: url(http://www.stackoverflow.com/favicon.ico) 96% / 15% no-repeat #eee;
+//	
+//	option {
+//		padding: 4px 10px;
+//	}
+//}
+///*target Internet Explorer 9 and Internet Explorer 10:*/
+//
+//@media screen and (min-width: 0\0) {
+//  select {
+//    background: none;
+//    padding: 5px;
+//  }
+//}

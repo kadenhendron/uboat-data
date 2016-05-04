@@ -43,7 +43,7 @@ var y = d3.scale.ordinal().rangeRoundBands([0, height], 1, 0);
 var	x = d3.time.scale().domain([minDate, maxDate]).range([0, width]);
 
 var tooltip = d3.select("#tooltip");
-	var tooltip_left = 50, tooltip_top = 35;
+var tooltip_left = 50, tooltip_top = 35;
 
 window.onmousemove = function (e) {
 	var mousex = e.clientX,
@@ -621,32 +621,44 @@ function drawTimeline(data) {
 //			}
 
 
-function sortData(data, sortType) {
-	//Sort by Ships Sunk
-	//data = data.sort(function(a,b) {return b.ships_sunk - a.ships_sunk;});
-
-	//Sort by Type
-	//data = data.sort(function(a, b) { return d3.ascending(a.type, b.type); });
-
-	//Sort by Fate Type
-	//data = data.sort(function(a, b) { return d3.ascending(a.fate_type, b.fate_type); });
-
-	//Sort by Shipyard
-	//data = data.sort(function(a, b) { return d3.ascending(a.shipyard, b.shipyard); });
-
-	//Sort by Ordered Date
-	//data = data.sort( function(a, b) { return a.ordered - b.ordered ;} );
-
-	//Sort by Launched Date
-	//data = data.sort( function(a, b) { return a.launched - b.launched ;} );
-
-	//Sort by Fate Date
-	//data = data.sort( function(a, b) { return a.fate - b.fate ;} );
+function sortData(data, sortOption) {
+	
+	switch (sortOption) {
+		case "shipName":
+			//data = data.sort(function(a, b) { return d3.ascending(a.name, b.name); });
+			break;
+		case "shipType":
+			data = data.sort(function(a, b) { return d3.ascending(a.type, b.type); });
+			break;
+		case "orderedDate":
+			data = data.sort( function(a, b) { return a.ordered - b.ordered ;} );
+			break;
+		case "laidDownDate":
+			data = data.sort( function(a, b) { return a.laid_down - b.laid_down ;} );
+			break;
+		case "launchedDate":
+			data = data.sort( function(a, b) { return a.launched - b.launched ;} );
+			break;
+		case "fateDate":
+			data = data.sort( function(a, b) { return a.fate - b.fate ;} );
+			break;
+		case "fateType":
+			data = data.sort(function(a, b) { return d3.ascending(a.fate_type, b.fate_type); });
+			break;
+		case "shipyard":
+			data = data.sort(function(a, b) { return d3.ascending(a.shipyard, b.shipyard); });
+			break;
+		case "shipsSunk":
+			data = data.sort(function(a,b) {return b.ships_sunk - a.ships_sunk;});
+			break;
+	};
+	
+	return data;
 }
 
 //DATA PULL FUNCTION
 
-function runDraw() {
+function runDraw(firstTime, sortOption) {
 	
 	d3.csv("data/uboat-data.csv", function(error, data) {
 		if (error) throw error;
@@ -659,6 +671,7 @@ function runDraw() {
 			d.value = +d.value;
 		});
 		
+		sortData(data, sortOption);		
 		
 		//d3.select("#chart").hasChildNodes == false
 		if ( true ) {
@@ -697,9 +710,11 @@ function runDraw() {
 					.attr("y2", -12)
 					.attr("stroke-width", 56)
 					.attr("stroke", "#eee");
-
-			drawLegendCareer();
-			drawLegendFate(data);
+			
+			if (firstTime) {
+				drawLegendCareer();
+				drawLegendFate(data);
+			}
 		}
 
 		y.domain(data.map(function(d) { return d.name; }));
@@ -731,13 +746,16 @@ function runDraw() {
 	});
 }
 
-runDraw();
+runDraw(true, "shipName");
 
 $('#redraw-button').click(function() {
 	
+	var sortDropdown = document.getElementById("sort-options");
+	var sortOption = sortDropdown.options[sortDropdown.selectedIndex].value;
+	
 	$('#chart').fadeOut('1000', function() {
 		$('#chart').empty();
-		runDraw();
+		runDraw(false, sortOption);
 		$('#chart').fadeIn('1000');
 	});
 });
