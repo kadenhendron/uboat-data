@@ -248,6 +248,47 @@ div.annotation {
   	shape-rendering: crispEdges;
 	display: none;
 }
+
+select {
+	border: 1px solid #333;
+	background: #eee;
+	width: 100%;
+	padding: 6px 8px;
+	font-family: $mono;
+	margin-bottom: 10px;
+	
+	option {
+		padding: 6px 8px;
+	}
+}
+
+select:focus {
+	outline: none;
+	background: #fff;
+}
+
+input[type="button"] {
+	font-family: $mono;
+	font-weight: bold;
+	text-transform: uppercase;
+	margin-bottom: 6px;
+	padding: 6px 12px;
+	background:#eee; 
+	border: 1px solid #333;
+	cursor:pointer;
+	-webkit-border-radius: 20px;
+	border-radius: 20px;
+}
+
+input[type="button"]:focus {
+	outline: none;
+}
+
+input[type="button"]:hover {
+	background: #bbb;
+}
+
+
 //
 //select {
 //	border: 1px solid #333;

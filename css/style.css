@@ -210,4 +210,42 @@ div.annotation {
   shape-rendering: crispEdges;
   display: none; }
 
+/* line 252, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+select {
+  border: 1px solid #333;
+  background: #eee;
+  width: 100%;
+  padding: 6px 8px;
+  font-family: "mono2", Helvetica, sans-serif;
+  margin-bottom: 10px; }
+  /* line 260, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+  select option {
+    padding: 6px 8px; }
+
+/* line 265, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+select:focus {
+  outline: none;
+  background: #fff; }
+
+/* line 270, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+input[type="button"] {
+  font-family: "mono2", Helvetica, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  padding: 6px 12px;
+  background: #eee;
+  border: 1px solid #333;
+  cursor: pointer;
+  -webkit-border-radius: 20px;
+  border-radius: 20px; }
+
+/* line 283, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+input[type="button"]:focus {
+  outline: none; }
+
+/* line 287, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+input[type="button"]:hover {
+  background: #bbb; }
+
 /*# sourceMappingURL=style.css.map */
