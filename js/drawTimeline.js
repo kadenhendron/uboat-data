@@ -5,13 +5,8 @@ function formatDate(dateToConvert) {
 	return format(new Date(dateToConvert));
 }
 
-var uboatNum = 1153,
-	timelineStroke = 12,
+var timelineStroke = 12,
 	timelineSpacing = 1;
-
-var margin = {top: 40, right: 20, bottom: 20, left: 60},
-	width = document.getElementById('chart').offsetWidth - margin.left - margin.right,
-	height = uboatNum * (timelineStroke + timelineSpacing);
 
 var colorOrdered = "#ccc",
 	colorOrderedHover = "#bbb",
@@ -40,10 +35,6 @@ var	minDate = new Date("1934"),
 	wwiiStart = new Date("9/1/1939"),
 	wwiiEnd = new Date("5/7/1945");
 
-var y = d3.scale.ordinal().rangeRoundBands([0, height], 1, 0);
-
-var	x = d3.time.scale().domain([minDate, maxDate]).range([0, width]);
-
 var tooltip = d3.select("#tooltip");
 var tooltip_left = 50, tooltip_top = 35;
 
@@ -53,23 +44,6 @@ window.onmousemove = function (e) {
 	$("#tooltip").css( "top", (mousey + 20) + 'px' );
 	$("#tooltip").css( "left", (mousex + 20) + 'px' );
 };
-
-var xAxisTop = d3.svg.axis()
-	.scale(x)
-	.tickSize(-20, 0)
-	.tickPadding(4)
-	.orient("top");
-
-var xAxis = d3.svg.axis()
-	.scale(x)
-	.tickSize(-(height))
-	.orient("top");
-
-var yAxis = d3.svg.axis()
-	.scale(y)
-	.tickSize(0)
-	.tickPadding(10)
-	.orient("left");
 
 function xAxisScroll() {
 	var $el =  $(".x-axis-container");
@@ -104,7 +78,7 @@ function xAxisScroll() {
 	});
 }
 
-function drawWWIIMarkers(svgContainer, xAxisContainer) {
+function drawWWIIMarkers(svgContainer, xAxisContainer, x, y, height) {
 	
 	var markersGroup = svgContainer.append("g").
 	attr("id", "markers-group");
@@ -312,7 +286,7 @@ function drawLegendFate(data) {
 		.text(function(d) { return d.values; });
 }
 
-function drawTimeline(data, targetData) {
+function drawTimeline(data, targetData, x, y) {
 
 	timelineContainer = d3.select("#timeline-container");
 	
@@ -559,7 +533,7 @@ function drawTimeline(data, targetData) {
 			.attr("x2", function(d) { return x(d.attack_date)+1})
 			.attr("y2", function(d) { return y(d.name); })
 			.attr("class","target-line")
-			.attr("stroke-width", timelineStroke)
+			.attr("stroke-width", function(d) { return y(d.name) == null ? 0 : timelineStroke; })
 			.attr("stroke", colorSunk)
 			.attr("shape-rendering","crispEdges");
 
@@ -740,8 +714,39 @@ function runDraw(firstTime, sortOption) {
 				d.fate = new Date(d.fate);
 				d.value = +d.value;
 			});
+			
+			//data = data.filter( function(d) {return d.fate_type === 'Missing'});
 
-			sortData(data, sortOption);	
+			sortData(data, sortOption);
+			
+			console.log(data.length);
+			
+			var uboatNum = data.length;
+
+			var margin = {top: 40, right: 20, bottom: 20, left: 60},
+				width = document.getElementById('chart').offsetWidth - margin.left - margin.right,
+				height = uboatNum * (timelineStroke + timelineSpacing);
+
+			var y = d3.scale.ordinal().rangeRoundBands([0, height], 1, 0);
+
+			var	x = d3.time.scale().domain([minDate, maxDate]).range([0, width]);
+
+			var xAxisTop = d3.svg.axis()
+				.scale(x)
+				.tickSize(-20, 0)
+				.tickPadding(4)
+				.orient("top");
+
+			var xAxis = d3.svg.axis()
+				.scale(x)
+				.tickSize(-(height))
+				.orient("top");
+
+			var yAxis = d3.svg.axis()
+				.scale(y)
+				.tickSize(0)
+				.tickPadding(10)
+				.orient("left");
 			
 			if ( true ) {
 				var svgContainer = d3.select("#chart")
@@ -800,8 +805,8 @@ function runDraw(firstTime, sortOption) {
 				.attr("class", "y axis")
 				.call(yAxis);
 
-			drawTimeline(data, targetData);
-			drawWWIIMarkers(svgContainer, xAxisContainer);
+			drawTimeline(data, targetData, x, y);
+			drawWWIIMarkers(svgContainer, xAxisContainer, x, y, height);
 		});
 	});
 }
