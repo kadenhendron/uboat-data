@@ -286,6 +286,42 @@ function drawLegendFate(data) {
 		.text(function(d) { return d.values; });
 }
 
+// Draw Fate Filter
+
+function drawFateFilter(data) {
+
+	var fateTypeList = d3.nest()
+		.key(function(d) { return d.fate_type; })
+		.rollup(function(v) { return v.length; })
+		.entries(data);
+	
+//	fateTypeList = fateTypeList.sort(function(a, b) { d3.ascending(a.key, b.key) })
+	
+	var fateFilter = d3.select("#fate-filter").selectAll("option")
+		.data(fateTypeList)
+		.enter()
+		.append("option")
+		.text(function(d) {return d.key;});
+}
+
+// Draw Fate Filter
+
+function drawShipTypeFilter(data) {
+
+	var shipTypeList = d3.nest()
+		.key(function(d) { return d.type; })
+		.rollup(function(v) { return v.length; })
+		.entries(data);
+	
+//	fateTypeList = fateTypeList.sort(function(a, b) { d3.ascending(a.key, b.key) })
+	
+	var shipTypeFilter = d3.select("#ship-type-filter").selectAll("option")
+		.data(shipTypeList)
+		.enter()
+		.append("option")
+		.text(function(d) {return d.key;});
+}
+
 function drawTimeline(data, targetData, x, y) {
 
 	timelineContainer = d3.select("#timeline-container");
@@ -693,7 +729,7 @@ function sortData(data, sortOption) {
 
 //DATA PULL FUNCTION
 
-function runDraw(firstTime, sortOption) {
+function runDraw(firstTime, sortOption, fateFilterOption, shipTypeFilterOption) {
 	
 	d3.csv("data/uboat-data.csv", function(error1, data) {
 		if (error1) throw error;
@@ -715,11 +751,22 @@ function runDraw(firstTime, sortOption) {
 				d.value = +d.value;
 			});
 			
-			//data = data.filter( function(d) {return d.fate_type === 'Missing'});
+			if (firstTime) {
+				drawLegendCareer();
+				drawLegendFate(data);
+				drawFateFilter(data);
+				drawShipTypeFilter(data);
+			}
+			
+			if (fateFilterOption) {
+				data = data.filter( function(d) {return d.fate_type === fateFilterOption});
+			}
+			
+			if (shipTypeFilterOption) {
+				data = data.filter( function(d) {return d.type === shipTypeFilterOption});
+			}
 
 			sortData(data, sortOption);
-			
-			console.log(data.length);
 			
 			var uboatNum = data.length;
 
@@ -748,48 +795,41 @@ function runDraw(firstTime, sortOption) {
 				.tickPadding(10)
 				.orient("left");
 			
-			if ( true ) {
-				var svgContainer = d3.select("#chart")
-					.append("svg")
-						.attr("id", "svg-container")
-						.attr("width", width + margin.left + margin.right)
-						.attr("height", height + margin.top + margin.bottom)
-					.append("g")
-						.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			var svgContainer = d3.select("#chart")
+				.append("svg")
+					.attr("id", "svg-container")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-				var timelineContainer = svgContainer
-					.append("g")
-					.attr("id", "timeline-container");
+			var timelineContainer = svgContainer
+				.append("g")
+				.attr("id", "timeline-container");
 
-				var targetContainer = svgContainer
-					.append("g")
-						.attr("id", "target-container");
+			var targetContainer = svgContainer
+				.append("g")
+					.attr("id", "target-container");
 
-				var xAxisContainer = d3.select("#chart")
-					.append("svg")
-						.attr("class", "x-axis-container")
-						.attr("width", width + margin.left + margin.right)
-						.attr("height", 48)
-					.append("g")
-						.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			var xAxisContainer = d3.select("#chart")
+				.append("svg")
+					.attr("class", "x-axis-container")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", 48)
+				.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-				xAxisScroll();
+			xAxisScroll();
 
-				var xAxisBackground = xAxisContainer.append("g")
-						.attr("class", "x-axis-background")
-					.append("line")
-						.attr("x1", -100)
-						.attr("x2", width+100)
-						.attr("y1", -12)
-						.attr("y2", -12)
-						.attr("stroke-width", 56)
-						.attr("stroke", "#eee");
-
-				if (firstTime) {
-					drawLegendCareer();
-					drawLegendFate(data);
-				}
-			}
+			var xAxisBackground = xAxisContainer.append("g")
+					.attr("class", "x-axis-background")
+				.append("line")
+					.attr("x1", -100)
+					.attr("x2", width+100)
+					.attr("y1", -12)
+					.attr("y2", -12)
+					.attr("stroke-width", 56)
+					.attr("stroke", "#eee");
 
 			y.domain(data.map(function(d) { return d.name; }));
 
@@ -818,9 +858,15 @@ $('#redraw-button').click(function() {
 	var sortDropdown = document.getElementById("sort-options");
 	var sortOption = sortDropdown.options[sortDropdown.selectedIndex].value;
 	
+	var fateFilter = document.getElementById("fate-filter");
+	var fateFilterOption = fateFilter.options[fateFilter.selectedIndex].value;
+	
+	var shipTypeFilter = document.getElementById("ship-type-filter");
+	var shipTypeFilterOption = shipTypeFilter.options[shipTypeFilter.selectedIndex].value;
+	
 	$('#chart').fadeOut('1000', function() {
 		$('#chart').empty();
-		runDraw(false, sortOption);
+		runDraw(false, sortOption, fateFilterOption, shipTypeFilterOption);
 		$('#chart').fadeIn('1000');
 	});
 });
