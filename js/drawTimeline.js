@@ -17,8 +17,10 @@ var colorOrdered = "#ccc",
 	colorOrderedHover = "#bbb",
 	colorLaidDown = "#aaaaaa",
 	colorLaidDownHover = "#999",
-	colorLaunched = "#789dcd",
-	colorLaunchedHover = "#5e8cc9",
+	colorLaunched = "#888",
+	colorLaunchedHover = "#777",
+	colorCommissioned = "#789dcd",
+	colorCommissionedHover = "#5e8cc9",
 	colorSunk = "#3670bc",
 	colorDecommissioned = "#999",
 	colorScuttled = "#555555",
@@ -174,8 +176,9 @@ function drawLegendCareer() {
 	var careerLegendMarks = [
 	  { name: 'Ordered', color: colorOrdered }, 
 	  { name: 'Under Construction', color: colorLaidDown },
-	  { name: 'In Service', color: colorLaunched },
-	  { name: 'Target Sunk', color: colorLaunched }
+	  { name: 'Uncommissioned', color: colorLaunched },
+	  { name: 'In Service', color: colorCommissioned },
+	  { name: 'Target Sunk', color: colorCommissioned }
 	];
 
 	var legendFate = d3.select("#legend-career")
@@ -222,7 +225,7 @@ function drawLegendCareer() {
 		.attr('transform', function(d, i) {
 			var height = timelineStroke + legendSpacing;
 			var horz = -2 * timelineStroke+24;
-			var vert = 3 * height+legendOffset;
+			var vert = 4 * height+legendOffset;
 			return 'translate(' + horz + ',' + vert + ')';
 		});
 
@@ -311,9 +314,9 @@ function drawLegendFate(data) {
 
 function drawTimeline(data) {
 
-	//ORDERED
-	
 	timelineContainer = d3.select("#timeline-container");
+	
+	//ORDERED
 
 	var orderedLinesGroup = timelineContainer.append("g");
 
@@ -384,8 +387,43 @@ function drawTimeline(data) {
 				.duration(50)		
 				.style("opacity", 0);
 		});
-
+	
 //LAUNCHED
+
+	var commissionedLinesGroup = timelineContainer.append("g");
+
+	var commissionedLines = commissionedLinesGroup.selectAll("line")
+		.data(data)
+		.enter()
+		.append("line")
+		.attr("class","commissioned-line")
+		.attr("x1", function(d) { return x(d.launched) })
+		.attr("y1", function(d) { return y(d.name); })
+		.attr("x2", function(d) { return x(d.commissioned) })
+		.attr("y2", function(d) { return y(d.name); })
+		.attr("stroke-width", timelineStroke)
+		.attr("stroke", colorLaunched)
+		.on("mouseover", function(d) {	
+			d3.select(this).attr("stroke", colorLaunchedHover)
+			tooltip.transition()		
+				.duration(50)		
+				.style("opacity", 1);
+			dayDistance = Math.round((d.commissioned-d.launched)/86400000); //This is returning PIXELS, not actual DAYS
+			tooltip.html(								
+					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Launched " 
+					+ formatDate(d.launched) + "</td></tr><tr><td colspan='2'> Commissioned "
+					+ formatDate(d.commissioned) +  "</td></tr><tr><td colspan='2'>"
+					+ dayDistance + " days before commissioning</td></tr>"
+					);
+		})					
+		.on("mouseout", function(d) {
+			d3.select(this).attr("stroke", colorLaunched)
+			tooltip.transition()		
+				.duration(50)		
+				.style("opacity", 0);
+		});
+
+//COMMISSIONED
 
 	var launchedLinesGroup = timelineContainer.append("g");
 
@@ -393,32 +431,32 @@ function drawTimeline(data) {
 		.data(data)
 		.enter()
 		.append("line")
-		.attr("x1", function(d) { return x(d.launched) })
+		.attr("x1", function(d) { return x(d.commissioned) })
 		.attr("y1", function(d) { return y(d.name); })
 		.attr("x2", function(d) { return x(d.fate) })
 		.attr("y2", function(d) { return y(d.name); })
 		.attr("stroke-width", timelineStroke)
-		.attr("stroke", colorLaunched)
+		.attr("stroke", colorCommissioned)
 		.attr("class","launched-line")
 		.on("mouseover", function(d) {
 
-			d3.select(this).attr("stroke", colorLaunchedHover)
+			d3.select(this).attr("stroke", colorCommissionedHover)
 
 			tooltip.transition()		
 				.duration(50)		
 				.style("opacity", 1);
-			dayDistance = Math.round((d.fate-d.launched)/86400000); //This is returning PIXELS, not actual DAYS
+			dayDistance = Math.round((d.fate-d.commissioned)/86400000); //This is returning PIXELS, not actual DAYS
 
 			tooltip.html(							
-					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Launched " 
-					+ formatDate(d.launched) + "</td></tr><tr><td colspan='2'>"
+					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Commissioned " 
+					+ formatDate(d.commissioned) + "</td></tr><tr><td colspan='2'>"
 					+ d.fate_type + " " + formatDate(d.fate) +  "</td></tr><tr><td colspan='2'>"
 					+ d.ships_sunk + " ships sunk</td></tr><tr><td colspan='2'>"
 					+ dayDistance + " days in service</td></tr>"
 					);
 		})					
 		.on("mouseout", function(d) {
-			d3.select(this).attr("stroke", colorLaunched)
+			d3.select(this).attr("stroke", colorCommissioned)
 			tooltip.transition()		
 				.duration(50)		
 				.style("opacity", 0);
@@ -618,7 +656,7 @@ function drawTimeline(data) {
 //						drawTargets(data);
 //					});
 //				}
-//			}
+//			} // Old filter code
 
 
 function sortData(data, sortOption) {
@@ -638,6 +676,9 @@ function sortData(data, sortOption) {
 			break;
 		case "launchedDate":
 			data = data.sort( function(a, b) { return a.launched - b.launched || a.id - b.id ;} );
+			break;
+		case "commissionedDate":
+			data = data.sort( function(a, b) { return a.commissioned - b.commissioned || a.id - b.id ;} );
 			break;
 		case "fateDate":
 			data = data.sort(function(a, b) { return a.fate - b.fate || d3.ascending(a.fate_type, b.fate_type) || a.id - b.id ; })
@@ -667,6 +708,7 @@ function runDraw(firstTime, sortOption) {
 			d.ordered = new Date(d.ordered);
 			d.laid_down = new Date(d.laid_down);
 			d.launched = new Date(d.launched);
+			d.commissioned = new Date(d.commissioned);
 			d.fate = new Date(d.fate);
 			d.value = +d.value;
 		});
