@@ -176,7 +176,7 @@ function drawLegendCareer() {
 	var careerLegendMarks = [
 	  { name: 'Ordered', color: colorOrdered }, 
 	  { name: 'Under Construction', color: colorLaidDown },
-	  { name: 'Uncommissioned', color: colorLaunched },
+	  { name: 'Launched', color: colorLaunched },
 	  { name: 'In Service', color: colorCommissioned },
 	  { name: 'Target Sunk', color: colorCommissioned }
 	];
