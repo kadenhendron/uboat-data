@@ -312,17 +312,37 @@ function drawLegendFate(data) {
 		.text(function(d) { return d.values; });
 }
 
-function drawTimeline(data) {
+function drawTimeline(data, targetData) {
 
 	timelineContainer = d3.select("#timeline-container");
 	
 	//ORDERED
+	
+	var allShipLineGroups = timelineContainer.append("g");
+	var allTargetLineGroups = timelineContainer.append("g");
 
-	var orderedLinesGroup = timelineContainer.append("g");
-
-	var orderedLines = orderedLinesGroup.selectAll("line")
+	var shipLineGroup = allShipLineGroups.selectAll("g")
 		.data(data)
 		.enter()
+		.append("g")
+		.attr("class", "ship-line-group")
+//		.on("click", function(d) {
+//			shipsSunk = d.ships_sunk;
+//			
+//			console.log(shipsSunk);
+//			
+//			shipLineGroup.transition()
+//				.duration(300)
+//				.attr("transform", "translate(" + 0 + "," + shipsSunk*(timelineSpacing + timelineStroke) + ")");
+//			
+//			targetLineGroup.transition()
+//				.duration(300)
+//				.attr("transform", "translate(" + 0 + "," + shipsSunk*(timelineSpacing + timelineStroke) + ")");
+//			//shipsSunk*(timelineSpacing + timelineStroke)
+//		})
+	;
+	
+	var orderedLines = shipLineGroup
 		.append("line")
 		.attr("class","ordered-line")
 		.attr("x1", function(d) { return x(d.ordered) })
@@ -353,13 +373,7 @@ function drawTimeline(data) {
 
 //LAID DOWN
 
-	var dayDistance = 0;
-
-	var laidDownLinesGroup = timelineContainer.append("g");
-
-	var laidDownLines = laidDownLinesGroup.selectAll("line")
-		.data(data)
-		.enter()
+	var laidDownLines = shipLineGroup
 		.append("line")
 		.attr("x1", function(d) { return x(d.laid_down) })
 		.attr("y1", function(d) { return y(d.name); })
@@ -390,13 +404,9 @@ function drawTimeline(data) {
 	
 //LAUNCHED
 
-	var commissionedLinesGroup = timelineContainer.append("g");
-
-	var commissionedLines = commissionedLinesGroup.selectAll("line")
-		.data(data)
-		.enter()
+	var launchedLines = shipLineGroup
 		.append("line")
-		.attr("class","commissioned-line")
+		.attr("class","launched-line")
 		.attr("x1", function(d) { return x(d.launched) })
 		.attr("y1", function(d) { return y(d.name); })
 		.attr("x2", function(d) { return x(d.commissioned) })
@@ -424,12 +434,8 @@ function drawTimeline(data) {
 		});
 
 //COMMISSIONED
-
-	var launchedLinesGroup = timelineContainer.append("g");
-
-	var launchedLines = launchedLinesGroup.selectAll("line")
-		.data(data)
-		.enter()
+	
+	var commissionedLines = shipLineGroup
 		.append("line")
 		.attr("x1", function(d) { return x(d.commissioned) })
 		.attr("y1", function(d) { return y(d.name); })
@@ -437,7 +443,7 @@ function drawTimeline(data) {
 		.attr("y2", function(d) { return y(d.name); })
 		.attr("stroke-width", timelineStroke)
 		.attr("stroke", colorCommissioned)
-		.attr("class","launched-line")
+		.attr("class","commissioned-line")
 		.on("mouseover", function(d) {
 
 			d3.select(this).attr("stroke", colorCommissionedHover)
@@ -462,13 +468,10 @@ function drawTimeline(data) {
 				.style("opacity", 0);
 		});
 
+	
 //FATE
-
-	var fateCirclesGroup = timelineContainer.append("g");
-
-	var fateCircles = fateCirclesGroup.selectAll("circle")
-		.data(data)
-		.enter()
+	
+	var fateCircles = shipLineGroup
 		.append("circle")
 		.attr("cx", function (d) { return x(d.fate); })
 		.attr("cy", function (d) { return y(d.name); })
@@ -542,28 +545,45 @@ function drawTimeline(data) {
 				.duration(50)		
 				.style("opacity", 0);
 		});
+	
+	var targetLineGroup = allTargetLineGroups.selectAll("g")
+		.data(targetData)
+		.enter()
+		.append("g")
+		.attr("class", "target-line-group");
+	
+	var targetLines = targetLineGroup
+		.append("line")
+			.attr("x1", function(d) { return x(d.attack_date) })
+			.attr("y1", function(d) { return y(d.name); })
+			.attr("x2", function(d) { return x(d.attack_date)+1})
+			.attr("y2", function(d) { return y(d.name); })
+			.attr("class","target-line")
+			.attr("stroke-width", timelineStroke)
+			.attr("stroke", colorSunk)
+			.attr("shape-rendering","crispEdges");
 
 	}
-
-	function drawTargets(data) {
-
-		$('#target-container').empty();
-
-		var targetLinesGroup = d3.select("#target-container")
-			.append("g");
-
-		var targetLines = targetLinesGroup.selectAll("line")
-			.data(data)
-			.enter()
-			.append("line")
-				.attr("x1", function(d) { return x(d.attack_date) })
-				.attr("y1", function(d) { return y(d.name); })
-				.attr("x2", function(d) { return x(d.attack_date)+1})
-				.attr("y2", function(d) { return y(d.name); })
-				.attr("stroke-width", timelineStroke)
-				.attr("stroke", colorSunk)
-				.attr("shape-rendering","crispEdges");
-	}
+//
+//	function drawTargets(data) {
+//
+//		$('#target-container').empty();
+//
+//		var targetLinesGroup = d3.select("#target-container")
+//			.append("g");
+//
+//		var targetLines = shipLineGroup
+//			.data(targetData)
+//			.enter()
+//			.append("line")
+//				.attr("x1", function(d) { return x(d.attack_date) })
+//				.attr("y1", function(d) { return y(d.name); })
+//				.attr("x2", function(d) { return x(d.attack_date)+1})
+//				.attr("y2", function(d) { return y(d.name); })
+//				.attr("stroke-width", timelineStroke)
+//				.attr("stroke", colorSunk)
+//				.attr("shape-rendering","crispEdges");
+//	}
 
 //	d3.select('#slider3').call(d3.slider().axis(true).value( [ 1934, 1946 ] ).on("slide", function(evt, value) {
 //		updateDate(value[ 0 ], value[ 1 ]);
@@ -701,89 +721,87 @@ function sortData(data, sortOption) {
 
 function runDraw(firstTime, sortOption) {
 	
-	d3.csv("data/uboat-data.csv", function(error, data) {
-		if (error) throw error;
-
-		data.forEach(function(d) {
-			d.ordered = new Date(d.ordered);
-			d.laid_down = new Date(d.laid_down);
-			d.launched = new Date(d.launched);
-			d.commissioned = new Date(d.commissioned);
-			d.fate = new Date(d.fate);
-			d.value = +d.value;
-		});
+	d3.csv("data/uboat-data.csv", function(error1, data) {
+		if (error1) throw error;
 		
-		sortData(data, sortOption);		
-		
-		//d3.select("#chart").hasChildNodes == false
-		if ( true ) {
-			var svgContainer = d3.select("#chart")
-				.append("svg")
-					.attr("id", "svg-container")
-					.attr("width", width + margin.left + margin.right)
-					.attr("height", height + margin.top + margin.bottom)
-				.append("g")
-					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-			var timelineContainer = svgContainer
-				.append("g")
-				.attr("id", "timeline-container");
-
-			var targetContainer = svgContainer
-				.append("g")
-					.attr("id", "target-container");
-
-			var xAxisContainer = d3.select("#chart")
-				.append("svg")
-					.attr("class", "x-axis-container")
-					.attr("width", width + margin.left + margin.right)
-					.attr("height", 48)
-				.append("g")
-					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		d3.csv("data/uboat-target-data.csv", function(error2, targetData) {
+			if (error2) throw error;
 			
-			xAxisScroll();
-
-			var xAxisBackground = xAxisContainer.append("g")
-					.attr("class", "x-axis-background")
-				.append("line")
-					.attr("x1", -100)
-					.attr("x2", width+100)
-					.attr("y1", -12)
-					.attr("y2", -12)
-					.attr("stroke-width", 56)
-					.attr("stroke", "#eee");
-			
-			if (firstTime) {
-				drawLegendCareer();
-				drawLegendFate(data);
-			}
-		}
-
-		y.domain(data.map(function(d) { return d.name; }));
-
-		var xAxisOverlayGroup = xAxisContainer.append("g")
-			.attr("class", "x-axis-overlay")
-			.call(xAxisTop);
-
-		var xAxisGroup = svgContainer.append("g")
-			.attr("class", "x axis")
-			.call(xAxis);
-
-		var yAxisGroup = svgContainer.append("g")
-			.attr("class", "y axis")
-			.call(yAxis);
-
-		drawTimeline(data);
-		drawWWIIMarkers(svgContainer, xAxisContainer);
-	//	drawFilter(data);
-
-		d3.csv("data/uboat-target-data.csv", function(error, data) {
-			data.forEach(function(d) {
+			targetData.forEach(function(d) {
 				d.attack_date = new Date(d.attack_date);
 				d.value = +d.value;
 			});
 
-			drawTargets(data);
+			data.forEach(function(d) {
+				d.ordered = new Date(d.ordered);
+				d.laid_down = new Date(d.laid_down);
+				d.launched = new Date(d.launched);
+				d.commissioned = new Date(d.commissioned);
+				d.fate = new Date(d.fate);
+				d.value = +d.value;
+			});
+
+			sortData(data, sortOption);	
+			
+			if ( true ) {
+				var svgContainer = d3.select("#chart")
+					.append("svg")
+						.attr("id", "svg-container")
+						.attr("width", width + margin.left + margin.right)
+						.attr("height", height + margin.top + margin.bottom)
+					.append("g")
+						.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+				var timelineContainer = svgContainer
+					.append("g")
+					.attr("id", "timeline-container");
+
+				var targetContainer = svgContainer
+					.append("g")
+						.attr("id", "target-container");
+
+				var xAxisContainer = d3.select("#chart")
+					.append("svg")
+						.attr("class", "x-axis-container")
+						.attr("width", width + margin.left + margin.right)
+						.attr("height", 48)
+					.append("g")
+						.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+				xAxisScroll();
+
+				var xAxisBackground = xAxisContainer.append("g")
+						.attr("class", "x-axis-background")
+					.append("line")
+						.attr("x1", -100)
+						.attr("x2", width+100)
+						.attr("y1", -12)
+						.attr("y2", -12)
+						.attr("stroke-width", 56)
+						.attr("stroke", "#eee");
+
+				if (firstTime) {
+					drawLegendCareer();
+					drawLegendFate(data);
+				}
+			}
+
+			y.domain(data.map(function(d) { return d.name; }));
+
+			var xAxisOverlayGroup = xAxisContainer.append("g")
+				.attr("class", "x-axis-overlay")
+				.call(xAxisTop);
+
+			var xAxisGroup = svgContainer.append("g")
+				.attr("class", "x axis")
+				.call(xAxis);
+
+			var yAxisGroup = svgContainer.append("g")
+				.attr("class", "y axis")
+				.call(yAxis);
+
+			drawTimeline(data, targetData);
+			drawWWIIMarkers(svgContainer, xAxisContainer);
 		});
 	});
 }

@@ -179,7 +179,7 @@ table, th, td {
   shape-rendering: crispEdges; }
 
 /* line 220, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
-#target-container {
+.target-line {
   pointer-events: none; }
 
 /* line 224, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
