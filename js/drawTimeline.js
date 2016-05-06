@@ -295,6 +295,8 @@ function drawFateFilter(data) {
 		.rollup(function(v) { return v.length; })
 		.entries(data);
 	
+	fateTypeList.unshift({"key":"Show All","values":0});
+	
 //	fateTypeList = fateTypeList.sort(function(a, b) { d3.ascending(a.key, b.key) })
 	
 	var fateFilter = d3.select("#fate-filter").selectAll("option")
@@ -313,13 +315,16 @@ function drawShipTypeFilter(data) {
 		.rollup(function(v) { return v.length; })
 		.entries(data);
 	
+	shipTypeList.unshift({"key":"Show All","values":0});
+	
 //	fateTypeList = fateTypeList.sort(function(a, b) { d3.ascending(a.key, b.key) })
 	
 	var shipTypeFilter = d3.select("#ship-type-filter").selectAll("option")
-		.data(shipTypeList)
+		.data(shipTypeList, function(d){return d.key;})
 		.enter()
 		.append("option")
 		.text(function(d) {return d.key;});
+	
 }
 
 function drawTimeline(data, targetData, x, y) {
@@ -574,6 +579,198 @@ function drawTimeline(data, targetData, x, y) {
 			.attr("shape-rendering","crispEdges");
 
 	}
+
+
+function sortData(data, sortOption) {
+	
+	switch (sortOption) {
+		case "shipName":
+			data = data.sort(function(a, b) { return a.id - b.id ;} );
+			break;
+//		case "shipType":
+//			data = data.sort(function(a, b) { return d3.ascending(a.type, b.type) || a.id - b.id ; });
+//			break;
+		case "orderedDate":
+			data = data.sort( function(a, b) { return a.ordered - b.ordered || a.id - b.id ;} );
+			break;
+		case "laidDownDate":
+			data = data.sort( function(a, b) { return a.laid_down - b.laid_down || a.id - b.id ;} );
+			break;
+		case "launchedDate":
+			data = data.sort( function(a, b) { return a.launched - b.launched || a.id - b.id ;} );
+			break;
+		case "commissionedDate":
+			data = data.sort( function(a, b) { return a.commissioned - b.commissioned || a.id - b.id ;} );
+			break;
+		case "fateDate":
+			data = data.sort(function(a, b) { return a.fate - b.fate || d3.ascending(a.fate_type, b.fate_type) || a.id - b.id ; })
+			break;
+//		case "fateType":
+//			data = data.sort(function(a, b) { return d3.ascending(a.fate_type, b.fate_type) || a.fate - b.fate || a.id - b.id ; })
+//			break;
+		case "shipyard":
+			data = data.sort(function(a, b) { return d3.ascending(a.shipyard, b.shipyard) || a.laid_down - b.laid_down || a.id - b.id ; })
+			break;
+		case "shipsSunk":
+			data = data.sort(function(a,b) {return b.ships_sunk - a.ships_sunk || a.launched - b.launched || a.id - b.id ;});
+			break;
+	};
+	
+	return data;
+}
+
+//DATA PULL FUNCTION
+
+function runDraw(firstTime, sortOption, fateFilterOption, shipTypeFilterOption) {
+	
+	d3.csv("data/uboat-data.csv", function(error1, data) {
+		if (error1) throw error;
+		
+		d3.csv("data/uboat-target-data.csv", function(error2, targetData) {
+			if (error2) throw error;
+			
+			targetData.forEach(function(d) {
+				d.attack_date = new Date(d.attack_date);
+				d.value = +d.value;
+			});
+
+			data.forEach(function(d) {
+				d.ordered = new Date(d.ordered);
+				d.laid_down = new Date(d.laid_down);
+				d.launched = new Date(d.launched);
+				d.commissioned = new Date(d.commissioned);
+				d.fate = new Date(d.fate);
+				d.value = +d.value;
+			});
+			
+			if (firstTime) {
+				drawLegendCareer();
+				drawLegendFate(data);
+				drawFateFilter(data);
+				drawShipTypeFilter(data);
+			}
+			
+			if (fateFilterOption != "Show All") {
+				data = data.filter( function(d) {return d.fate_type === fateFilterOption});
+			}
+			
+			if (shipTypeFilterOption != "Show All") {
+				data = data.filter( function(d) {return d.type === shipTypeFilterOption});
+			}
+
+			sortData(data, sortOption);
+			
+			
+			var uboatNum = data.length;
+			d3.select('#ships-shown').text(uboatNum+" U-boats shown");
+			
+			
+			console.log(uboatNum);
+
+			var margin = {top: 40, right: 20, bottom: 20, left: 60},
+				width = document.getElementById('chart').offsetWidth - margin.left - margin.right,
+				height = uboatNum * (timelineStroke + timelineSpacing);
+
+			var	x = d3.time.scale().domain([minDate, maxDate]).range([0, width]);
+			var y = d3.scale.ordinal().rangeRoundPoints([0, height], 1);
+
+			var xAxisTop = d3.svg.axis()
+				.scale(x)
+				.tickSize(-20, 0)
+				.tickPadding(4)
+				.orient("top");
+
+			var xAxis = d3.svg.axis()
+				.scale(x)
+				.tickPadding(0)
+				.tickSize(-(height))
+				.tickFormat("")
+				.orient("top");
+
+			var yAxis = d3.svg.axis()
+				.scale(y)
+				.tickSize(0)
+				.tickPadding(10)
+				.orient("left");
+			
+			var svgContainer = d3.select("#chart")
+				.append("svg")
+					.attr("id", "svg-container")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+			var timelineContainer = svgContainer
+				.append("g")
+					.attr("id", "timeline-container");
+
+			var targetContainer = svgContainer
+				.append("g")
+					.attr("id", "target-container");
+
+			var xAxisContainer = d3.select("#chart")
+				.append("svg")
+					.attr("class", "x-axis-container")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", 48)
+				.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+			xAxisScroll();
+
+			var xAxisBackground = xAxisContainer.append("g")
+					.attr("class", "x-axis-background")
+				.append("line")
+					.attr("x1", -100)
+					.attr("x2", width+100)
+					.attr("y1", -12)
+					.attr("y2", -12)
+					.attr("stroke-width", 56)
+					.attr("stroke", "#eee")
+					.style("opacity",".5");
+
+			y.domain(data.map(function(d) { return d.name; }));
+
+			var xAxisOverlayGroup = xAxisContainer.append("g")
+				.attr("class", "x-axis-overlay")
+				.call(xAxisTop);
+
+			var xAxisGroup = svgContainer.append("g")
+				.attr("class", "x axis")
+				.call(xAxis);
+
+			var yAxisGroup = svgContainer.append("g")
+				.attr("class", "y axis")
+				.call(yAxis);
+
+			drawTimeline(data, targetData, x, y);
+			drawWWIIMarkers(svgContainer, xAxisContainer, x, y, height);
+		});
+	});
+}
+
+runDraw(true, "shipName", "Show All", "Show All");
+
+$('#redraw-button').click(function() {
+	
+	var sortDropdown = document.getElementById("sort-options");
+	var sortOption = sortDropdown.options[sortDropdown.selectedIndex].value;
+	
+	var fateFilter = document.getElementById("fate-filter");
+	var fateFilterOption = fateFilter.options[fateFilter.selectedIndex].value;
+	
+	var shipTypeFilter = document.getElementById("ship-type-filter");
+	var shipTypeFilterOption = shipTypeFilter.options[shipTypeFilter.selectedIndex].value;
+	
+	$('#chart').fadeOut('1000', function() {
+		$('#chart').empty();
+		runDraw(false, sortOption, fateFilterOption, shipTypeFilterOption);
+		$('#chart').fadeIn('1000');
+	});
+});
+
+
 //
 //	function drawTargets(data) {
 //
@@ -687,186 +884,3 @@ function drawTimeline(data, targetData, x, y) {
 //					});
 //				}
 //			} // Old filter code
-
-
-function sortData(data, sortOption) {
-	
-	switch (sortOption) {
-		case "shipName":
-			data = data.sort(function(a, b) { return a.id - b.id ;} );
-			break;
-		case "shipType":
-			data = data.sort(function(a, b) { return d3.ascending(a.type, b.type) || a.id - b.id ; });
-			break;
-		case "orderedDate":
-			data = data.sort( function(a, b) { return a.ordered - b.ordered || a.id - b.id ;} );
-			break;
-		case "laidDownDate":
-			data = data.sort( function(a, b) { return a.laid_down - b.laid_down || a.id - b.id ;} );
-			break;
-		case "launchedDate":
-			data = data.sort( function(a, b) { return a.launched - b.launched || a.id - b.id ;} );
-			break;
-		case "commissionedDate":
-			data = data.sort( function(a, b) { return a.commissioned - b.commissioned || a.id - b.id ;} );
-			break;
-		case "fateDate":
-			data = data.sort(function(a, b) { return a.fate - b.fate || d3.ascending(a.fate_type, b.fate_type) || a.id - b.id ; })
-			break;
-		case "fateType":
-			data = data.sort(function(a, b) { return d3.ascending(a.fate_type, b.fate_type) || a.fate - b.fate || a.id - b.id ; })
-			break;
-		case "shipyard":
-			data = data.sort(function(a, b) { return d3.ascending(a.shipyard, b.shipyard) || a.laid_down - b.laid_down || a.id - b.id ; })
-			break;
-		case "shipsSunk":
-			data = data.sort(function(a,b) {return b.ships_sunk - a.ships_sunk || a.launched - b.launched || a.id - b.id ;});
-			break;
-	};
-	
-	return data;
-}
-
-//DATA PULL FUNCTION
-
-function runDraw(firstTime, sortOption, fateFilterOption, shipTypeFilterOption) {
-	
-	d3.csv("data/uboat-data.csv", function(error1, data) {
-		if (error1) throw error;
-		
-		d3.csv("data/uboat-target-data.csv", function(error2, targetData) {
-			if (error2) throw error;
-			
-			targetData.forEach(function(d) {
-				d.attack_date = new Date(d.attack_date);
-				d.value = +d.value;
-			});
-
-			data.forEach(function(d) {
-				d.ordered = new Date(d.ordered);
-				d.laid_down = new Date(d.laid_down);
-				d.launched = new Date(d.launched);
-				d.commissioned = new Date(d.commissioned);
-				d.fate = new Date(d.fate);
-				d.value = +d.value;
-			});
-			
-			if (firstTime) {
-				drawLegendCareer();
-				drawLegendFate(data);
-				drawFateFilter(data);
-				drawShipTypeFilter(data);
-			}
-			
-			if (fateFilterOption) {
-				data = data.filter( function(d) {return d.fate_type === fateFilterOption});
-			}
-			
-			if (shipTypeFilterOption) {
-				data = data.filter( function(d) {return d.type === shipTypeFilterOption});
-			}
-
-			sortData(data, sortOption);
-			
-			var uboatNum = data.length;
-
-			var margin = {top: 40, right: 20, bottom: 20, left: 60},
-				width = document.getElementById('chart').offsetWidth - margin.left - margin.right,
-				height = uboatNum * (timelineStroke + timelineSpacing);
-
-			var y = d3.scale.ordinal().rangeRoundBands([0, height], 1, 0);
-
-			var	x = d3.time.scale().domain([minDate, maxDate]).range([0, width]);
-
-			var xAxisTop = d3.svg.axis()
-				.scale(x)
-				.tickSize(-20, 0)
-				.tickPadding(4)
-				.orient("top");
-
-			var xAxis = d3.svg.axis()
-				.scale(x)
-				.tickSize(-(height))
-				.orient("top");
-
-			var yAxis = d3.svg.axis()
-				.scale(y)
-				.tickSize(0)
-				.tickPadding(10)
-				.orient("left");
-			
-			var svgContainer = d3.select("#chart")
-				.append("svg")
-					.attr("id", "svg-container")
-					.attr("width", width + margin.left + margin.right)
-					.attr("height", height + margin.top + margin.bottom)
-				.append("g")
-					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-			var timelineContainer = svgContainer
-				.append("g")
-				.attr("id", "timeline-container");
-
-			var targetContainer = svgContainer
-				.append("g")
-					.attr("id", "target-container");
-
-			var xAxisContainer = d3.select("#chart")
-				.append("svg")
-					.attr("class", "x-axis-container")
-					.attr("width", width + margin.left + margin.right)
-					.attr("height", 48)
-				.append("g")
-					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-			xAxisScroll();
-
-			var xAxisBackground = xAxisContainer.append("g")
-					.attr("class", "x-axis-background")
-				.append("line")
-					.attr("x1", -100)
-					.attr("x2", width+100)
-					.attr("y1", -12)
-					.attr("y2", -12)
-					.attr("stroke-width", 56)
-					.attr("stroke", "#eee");
-
-			y.domain(data.map(function(d) { return d.name; }));
-
-			var xAxisOverlayGroup = xAxisContainer.append("g")
-				.attr("class", "x-axis-overlay")
-				.call(xAxisTop);
-
-			var xAxisGroup = svgContainer.append("g")
-				.attr("class", "x axis")
-				.call(xAxis);
-
-			var yAxisGroup = svgContainer.append("g")
-				.attr("class", "y axis")
-				.call(yAxis);
-
-			drawTimeline(data, targetData, x, y);
-			drawWWIIMarkers(svgContainer, xAxisContainer, x, y, height);
-		});
-	});
-}
-
-runDraw(true, "shipName");
-
-$('#redraw-button').click(function() {
-	
-	var sortDropdown = document.getElementById("sort-options");
-	var sortOption = sortDropdown.options[sortDropdown.selectedIndex].value;
-	
-	var fateFilter = document.getElementById("fate-filter");
-	var fateFilterOption = fateFilter.options[fateFilter.selectedIndex].value;
-	
-	var shipTypeFilter = document.getElementById("ship-type-filter");
-	var shipTypeFilterOption = shipTypeFilter.options[shipTypeFilter.selectedIndex].value;
-	
-	$('#chart').fadeOut('1000', function() {
-		$('#chart').empty();
-		runDraw(false, sortOption, fateFilterOption, shipTypeFilterOption);
-		$('#chart').fadeIn('1000');
-	});
-});
