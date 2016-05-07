@@ -45,6 +45,22 @@ window.onmousemove = function (e) {
 	$("#tooltip").css( "left", (mousex + 20) + 'px' );
 };
 
+function setSelectValue (id, val) {
+    document.getElementById(id).value = val;
+}
+
+$("#reset-sort-options").click(function() {
+	setSelectValue('sort-options', "shipName");
+});
+
+$("#reset-ship-type-filter").click(function() {
+	setSelectValue('ship-type-filter', "Show All");
+});
+
+$("#reset-fate-filter").click(function() {
+	setSelectValue('fate-filter', "Show All");
+});
+
 function xAxisScroll() {
 	var $el =  $(".x-axis-container");
 	var offset = $el.offset().top;
@@ -660,12 +676,8 @@ function runDraw(firstTime, sortOption, fateFilterOption, shipTypeFilterOption) 
 
 			sortData(data, sortOption);
 			
-			
 			var uboatNum = data.length;
 			d3.select('#ships-shown').text(uboatNum+" U-boats shown");
-			
-			
-			console.log(uboatNum);
 
 			var margin = {top: 40, right: 20, bottom: 20, left: 60},
 				width = document.getElementById('chart').offsetWidth - margin.left - margin.right,
@@ -727,8 +739,7 @@ function runDraw(firstTime, sortOption, fateFilterOption, shipTypeFilterOption) 
 					.attr("y1", -12)
 					.attr("y2", -12)
 					.attr("stroke-width", 56)
-					.attr("stroke", "#eee")
-					.style("opacity",".5");
+					.attr("stroke", "#eee");
 
 			y.domain(data.map(function(d) { return d.name; }));
 

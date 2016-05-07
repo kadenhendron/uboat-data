@@ -258,9 +258,8 @@ select {
 	border: 1px solid #333;
 	background: #eee;
 	width: 100%;
-	padding: 6px 8px;
 	font-family: $mono;
-	margin: 4px 0 10px;
+	padding:6px 8px;
 	
 	option {
 		padding: 6px 8px;
@@ -276,7 +275,9 @@ input[type="button"] {
 	font-family: $mono;
 	text-transform: uppercase;
 	margin: 6px 0;
-	padding: 6px 12px; 
+	padding: 6px 12px;
+	width: 100%;
+	text-align: center;
 	background:#eee; 
 	border: 1px solid #333;
 	cursor:pointer;
@@ -289,7 +290,30 @@ input[type="button"]:focus {
 }
 
 input[type="button"]:hover {
-	background: #bbb;
+	background: #ccc;
+}
+
+.select-container {
+	width:100%;
+	position:relative;
+	padding-right: 33px;
+	margin: 4px 0 10px;
+}
+
+.reset-filter {
+	width: 34px;
+	height:34px;
+	position:absolute;
+	right:0;
+	top:0;
+	background-image: url("/images/reset.png");
+	background-size: cover;
+	border: 1px solid #333;
+	cursor:pointer;
+}
+
+.reset-filter:hover {
+	background-color:#ccc;
 }
 
 

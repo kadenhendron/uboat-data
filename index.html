@@ -46,24 +46,33 @@
 					<tr>
 						<td>
 							<h3>Sort</h3>
-							<select id="sort-options" name="sort-options">
-								<option value="shipName">Name</option>
-								<option value="orderedDate">Order Date</option>
-								<option value="laidDownDate">Laid Down Date</option>
-								<option value="launchedDate">Launch Date</option>
-								<option value="commissionedDate">Commission Date</option>
-								<option value="fateDate">Fate Date</option>
-								<option value="shipyard">Shipyard</option>
-								<option value="shipsSunk">Ships Sunk</option>
-							</select>
+							<div class="select-container">
+								<select id="sort-options" name="sort-options">
+									<option value="shipName">Name</option>
+									<option value="orderedDate">Order Date</option>
+									<option value="laidDownDate">Laid Down Date</option>
+									<option value="launchedDate">Launch Date</option>
+									<option value="commissionedDate">Commission Date</option>
+									<option value="fateDate">Fate Date</option>
+									<option value="shipyard">Shipyard</option>
+									<option value="shipsSunk">Ships Sunk</option>
+								</select>
+								<div class="reset-filter" id="reset-sort-options"></div>
+							</div>
 							
 							<h3>Filter by Fate</h3>
-							<select id="fate-filter" name="fate-filter">
-							</select>
+							<div class="select-container">
+								<select id="fate-filter" name="fate-filter">
+								</select>
+								<div class="reset-filter" id="reset-fate-filter"></div>
+							</div>
 							
 							<h3>Filter by Type</h3>
-							<select id="ship-type-filter" name="ship-type-filter">
-							</select>
+							<div class="select-container">
+								<select id="ship-type-filter" name="ship-type-filter">
+								</select>
+								<div class="reset-filter" id="reset-ship-type-filter"></div>
+							</div>
 							
 							<input type="button" id="redraw-button" value="Filter Timeline">
 							

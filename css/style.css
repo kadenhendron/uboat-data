@@ -216,36 +216,60 @@ select {
   border: 1px solid #333;
   background: #eee;
   width: 100%;
-  padding: 6px 8px;
   font-family: "mono2", Helvetica, sans-serif;
-  margin: 4px 0 10px; }
-  /* line 265, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+  padding: 6px 8px; }
+  /* line 264, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
   select option {
     padding: 6px 8px; }
 
-/* line 270, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 269, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 select:focus {
   outline: none;
   background: #fff; }
 
-/* line 275, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 274, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 input[type="button"] {
   font-family: "mono2", Helvetica, sans-serif;
   text-transform: uppercase;
   margin: 6px 0;
   padding: 6px 12px;
+  width: 100%;
+  text-align: center;
   background: #eee;
   border: 1px solid #333;
   cursor: pointer;
   -webkit-border-radius: 20px;
   border-radius: 20px; }
 
-/* line 287, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 288, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 input[type="button"]:focus {
   outline: none; }
 
-/* line 291, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+/* line 292, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
 input[type="button"]:hover {
-  background: #bbb; }
+  background: #ccc; }
+
+/* line 296, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+.select-container {
+  width: 100%;
+  position: relative;
+  padding-right: 33px;
+  margin: 4px 0 10px; }
+
+/* line 303, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+.reset-filter {
+  width: 34px;
+  height: 34px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-image: url("/images/reset.png");
+  background-size: cover;
+  border: 1px solid #333;
+  cursor: pointer; }
+
+/* line 315, C:/Users/Kaden/Documents/GitHub/uboat-data/css/style.scss */
+.reset-filter:hover {
+  background-color: #ccc; }
 
 /*# sourceMappingURL=style.css.map */
