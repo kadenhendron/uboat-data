@@ -340,7 +340,6 @@ function drawShipTypeFilter(data) {
 		.enter()
 		.append("option")
 		.text(function(d) {return d.key;});
-	
 }
 
 function drawTimeline(data, targetData, x, y) {
