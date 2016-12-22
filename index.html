@@ -5,15 +5,15 @@
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/grid12.css">
 <!--
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 			<script>if (typeof jQuery === 'undefined') {document.write(unescape('js/jquery.js'));}</script>
 -->
 		<script src="js/jquery.js" charset="utf-8"></script>
 		<script src="js/d3.min.js" charset="utf-8"></script>
 	</head>
-	
+
 	<body>
-		
+
 		<div id="description">
 			<h1>U-Boat Timeline</h1>
 			<p>
@@ -21,13 +21,13 @@
 			</p>
 			<p>
 				This visualization is a timeline of all 1,153 U-Boats, detailing each submarine's construction, service, successes, and fate. Visit the <a href="https://github.com/kadenhendron/uboat-data">GitHub repository</a> to access the source data and code. Read the <a href="https://medium.com/@kadenhendron/germany-s-u-boats-data-visualization-6e018c6c174#.t6be2ew0i">companion piece</a> on Medium to see more U-Boat data visualizations.
-				
-				
+
+
 			</p>
 		</div>
 		<div id="chart-container">
 			<div id="chart"></div>
-			
+
 			<div id="side-content">
 				<table id="legend">
 					<tr><th>Legend</th></tr>
@@ -38,7 +38,7 @@
 					</tr>
 					<tr>
 						<td id="legend-fate">
-							<h3>Fate 
+							<h3>Fate
 								<span>Ship Count</span>
 							</h3>
 						</td>
@@ -59,29 +59,29 @@
 								</select>
 								<div class="reset-filter" id="reset-sort-options"></div>
 							</div>
-							
+
 							<h3>Filter by Fate</h3>
 							<div class="select-container">
 								<select id="fate-filter" name="fate-filter">
 								</select>
 								<div class="reset-filter" id="reset-fate-filter"></div>
 							</div>
-							
+
 							<h3>Filter by Type</h3>
 							<div class="select-container">
 								<select id="ship-type-filter" name="ship-type-filter">
 								</select>
 								<div class="reset-filter" id="reset-ship-type-filter"></div>
 							</div>
-							
+
 							<input type="button" id="redraw-button" value="Filter Timeline">
-							
+
 							<div id="ships-shown">
 							</div>
 						</td>
 					</tr>
 				</table>
-				
+
 <!--
 				<table id="filter">
 					<tr><th>Filters</th></tr>
@@ -93,9 +93,9 @@
 -->
 			</div>
 		</div>
-		
+
 		<table id="tooltip"></table>
-		
+
 		<script src="js/drawTimeline.js"></script>
 	</body>
 </html>
