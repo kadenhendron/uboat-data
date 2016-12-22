@@ -46,7 +46,7 @@ window.onmousemove = function (e) {
 };
 
 function setSelectValue (id, val) {
-    document.getElementById(id).value = val;
+	document.getElementById(id).value = val;
 }
 
 $("#reset-sort-options").click(function() {
@@ -64,30 +64,30 @@ $("#reset-fate-filter").click(function() {
 function xAxisScroll() {
 	var $el =  $(".x-axis-container");
 	var offset = $el.offset().top;
-	
+
 	$(window).scroll(function(e){
-		
+
 		var isPositionFixed = ($el.css('position') == 'fixed');
 		var left_offset = $("#chart-container").offset().left;
 		var right_offset = ($(window).width() - ($("#chart-container").offset().left + $("#chart-container").outerWidth()));
 
-		if ($(this).scrollTop() > offset && !isPositionFixed){ 
+		if ($(this).scrollTop() > offset && !isPositionFixed){
 			$el.css({'position': 'fixed', 'top': '0px', 'left': left_offset });
 			$('#side-content').css({'position': 'fixed', 'top': '18px', 'right': right_offset });
 		}
 		if ($(this).scrollTop() < offset) {
 			$el.css({'position': 'absolute', 'top': '-8px', 'left': 0});
 			$('#side-content').css({'position': 'absolute', 'top': '6px', 'right': 0});
-		} 
+		}
 	});
-	
+
 	$(window).resize(function(){
-		
+
 		var isPositionFixed = ($el.css('position') == 'fixed');
 		var left_offset = $("#chart-container").offset().left;
 		var right_offset = ($(window).width() - ($("#chart-container").offset().left + $("#chart-container").outerWidth()));
-		
-		if ($(this).scrollTop() > offset && !isPositionFixed){ 
+
+		if ($(this).scrollTop() > offset && !isPositionFixed){
 			$el.css({'position': 'fixed', 'top': '0px', 'left': left_offset });
 			$('#side-content').css({'position': 'fixed', 'top': '18px', 'right': right_offset });
 		}
@@ -95,10 +95,10 @@ function xAxisScroll() {
 }
 
 function drawWWIIMarkers(svgContainer, xAxisContainer, x, y, height) {
-	
+
 	var markersGroup = svgContainer.append("g").
 	attr("id", "markers-group");
-	
+
 	var markersTextGroup = xAxisContainer.append("g");
 
 	//Markers - Timeline section
@@ -144,7 +144,7 @@ function drawWWIIMarkers(svgContainer, xAxisContainer, x, y, height) {
 		.attr("stroke-width", 1)
 		.attr("shape-rendering","crispEdges")
 		.attr("stroke", colorWarMarkers);
-	var wwiiEndMarkerTop = markersTextGroup.append("line")	
+	var wwiiEndMarkerTop = markersTextGroup.append("line")
 		.attr("x1", function(d) { return x(wwiiEnd) })
 		.attr("y1", -14)
 		.attr("x2", function(d) { return x(wwiiEnd) })
@@ -164,7 +164,7 @@ var legendSpacing = 8,
 function drawLegendCareer() {
 
 	var careerLegendMarks = [
-	  { name: 'Ordered', color: colorOrdered }, 
+	  { name: 'Ordered', color: colorOrdered },
 	  { name: 'Under Construction', color: colorLaidDown },
 	  { name: 'Launched', color: colorLaunched },
 	  { name: 'In Service', color: colorCommissioned },
@@ -198,7 +198,7 @@ function drawLegendCareer() {
 		.attr("stroke-width", timelineStroke)
 		.attr("stroke", function(d) { return d.color;});
 
-	legendFateItem.append('text')                       
+	legendFateItem.append('text')
 		.attr('x', timelineStroke + 12)
 		.attr('y', 5)
 		.text(function(d) { return d.name; });
@@ -288,13 +288,13 @@ function drawLegendFate(data) {
 		};
 	});
 
-	legendFateItem.append('text')                       
+	legendFateItem.append('text')
 		.attr('x', timelineStroke + 4)
 		.attr('y', 5)
 		.attr('fil', colorText)
 		.text(function(d) { return d.key; });
 
-	legendFateItem.append('text')                       
+	legendFateItem.append('text')
 		.attr('x', legendWidth-legendOffset)
 		.attr('y', 5)
 		.attr('fill', colorTextLight)
@@ -310,11 +310,11 @@ function drawFateFilter(data) {
 		.key(function(d) { return d.fate_type; })
 		.rollup(function(v) { return v.length; })
 		.entries(data);
-	
+
 	fateTypeList.unshift({"key":"Show All","values":0});
-	
+
 //	fateTypeList = fateTypeList.sort(function(a, b) { d3.ascending(a.key, b.key) })
-	
+
 	var fateFilter = d3.select("#fate-filter").selectAll("option")
 		.data(fateTypeList)
 		.enter()
@@ -330,25 +330,24 @@ function drawShipTypeFilter(data) {
 		.key(function(d) { return d.type; })
 		.rollup(function(v) { return v.length; })
 		.entries(data);
-	
+
 	shipTypeList.unshift({"key":"Show All","values":0});
-	
+
 //	fateTypeList = fateTypeList.sort(function(a, b) { d3.ascending(a.key, b.key) })
-	
+
 	var shipTypeFilter = d3.select("#ship-type-filter").selectAll("option")
 		.data(shipTypeList, function(d){return d.key;})
 		.enter()
 		.append("option")
 		.text(function(d) {return d.key;});
-	
 }
 
 function drawTimeline(data, targetData, x, y) {
 
 	timelineContainer = d3.select("#timeline-container");
-	
+
 	//ORDERED
-	
+
 	var allShipLineGroups = timelineContainer.append("g");
 	var allTargetLineGroups = timelineContainer.append("g");
 
@@ -359,20 +358,20 @@ function drawTimeline(data, targetData, x, y) {
 		.attr("class", "ship-line-group")
 //		.on("click", function(d) {
 //			shipsSunk = d.ships_sunk;
-//			
+//
 //			console.log(shipsSunk);
-//			
+//
 //			shipLineGroup.transition()
 //				.duration(300)
 //				.attr("transform", "translate(" + 0 + "," + shipsSunk*(timelineSpacing + timelineStroke) + ")");
-//			
+//
 //			targetLineGroup.transition()
 //				.duration(300)
 //				.attr("transform", "translate(" + 0 + "," + shipsSunk*(timelineSpacing + timelineStroke) + ")");
 //			//shipsSunk*(timelineSpacing + timelineStroke)
 //		})
 	;
-	
+
 	var orderedLines = shipLineGroup
 		.append("line")
 		.attr("class","ordered-line")
@@ -382,23 +381,23 @@ function drawTimeline(data, targetData, x, y) {
 		.attr("y2", function(d) { return y(d.name); })
 		.attr("stroke-width", timelineStroke)
 		.attr("stroke", colorOrdered)
-		.on("mouseover", function(d) {	
+		.on("mouseover", function(d) {
 			d3.select(this).attr("stroke", colorOrderedHover)
-			tooltip.transition()		
-				.duration(50)		
+			tooltip.transition()
+				.duration(50)
 				.style("opacity", 1);
 			dayDistance = Math.round((d.laid_down-d.ordered)/86400000); //This is returning PIXELS, not actual DAYS
-			tooltip.html(								
-					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Ordered " 
+			tooltip.html(
+					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Ordered "
 					+ formatDate(d.ordered) + "</td></tr><tr><td colspan='2'> Laid Down "
 					+ formatDate(d.laid_down) +  "</td></tr><tr><td colspan='2'>"
 					+ dayDistance + " days before construction</td></tr>"
 					);
-		})					
+		})
 		.on("mouseout", function(d) {
 			d3.select(this).attr("stroke", colorOrdered)
-			tooltip.transition()		
-				.duration(50)		
+			tooltip.transition()
+				.duration(50)
 				.style("opacity", 0);
 		});
 
@@ -414,25 +413,25 @@ function drawTimeline(data, targetData, x, y) {
 		.attr("stroke", colorLaidDown)
 		.on("mouseover", function(d) {
 			d3.select(this).attr("stroke", colorLaidDownHover)
-			tooltip.transition()		
-				.duration(50)		
+			tooltip.transition()
+				.duration(50)
 				.style("opacity", 1);
 			dayDistance = Math.round((d.launched-d.laid_down)/86400000); //This is returning PIXELS, not actual DAYS
-			tooltip.html(								
-					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Laid Down " 
+			tooltip.html(
+					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Laid Down "
 					+ formatDate(d.laid_down) + "</td></tr><tr><td colspan='2'> Launched "
 					+ formatDate(d.launched) +  "</td></tr><tr><td colspan='2'>"
 					+ dayDistance + " days under construction</td></tr><tr><td colspan='2'>Constructed at "
 					+ d.shipyard + "</td></tr>"
 					);
-		})					
+		})
 		.on("mouseout", function(d) {
 			d3.select(this).attr("stroke", colorLaidDown)
-			tooltip.transition()		
-				.duration(50)		
+			tooltip.transition()
+				.duration(50)
 				.style("opacity", 0);
 		});
-	
+
 //LAUNCHED
 
 	var launchedLines = shipLineGroup
@@ -444,28 +443,28 @@ function drawTimeline(data, targetData, x, y) {
 		.attr("y2", function(d) { return y(d.name); })
 		.attr("stroke-width", timelineStroke)
 		.attr("stroke", colorLaunched)
-		.on("mouseover", function(d) {	
+		.on("mouseover", function(d) {
 			d3.select(this).attr("stroke", colorLaunchedHover)
-			tooltip.transition()		
-				.duration(50)		
+			tooltip.transition()
+				.duration(50)
 				.style("opacity", 1);
 			dayDistance = Math.round((d.commissioned-d.launched)/86400000); //This is returning PIXELS, not actual DAYS
-			tooltip.html(								
-					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Launched " 
+			tooltip.html(
+					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Launched "
 					+ formatDate(d.launched) + "</td></tr><tr><td colspan='2'> Commissioned "
 					+ formatDate(d.commissioned) +  "</td></tr><tr><td colspan='2'>"
 					+ dayDistance + " days before commissioning</td></tr>"
 					);
-		})					
+		})
 		.on("mouseout", function(d) {
 			d3.select(this).attr("stroke", colorLaunched)
-			tooltip.transition()		
-				.duration(50)		
+			tooltip.transition()
+				.duration(50)
 				.style("opacity", 0);
 		});
 
 //COMMISSIONED
-	
+
 	var commissionedLines = shipLineGroup
 		.append("line")
 		.attr("x1", function(d) { return x(d.commissioned) })
@@ -479,29 +478,29 @@ function drawTimeline(data, targetData, x, y) {
 
 			d3.select(this).attr("stroke", colorCommissionedHover)
 
-			tooltip.transition()		
-				.duration(50)		
+			tooltip.transition()
+				.duration(50)
 				.style("opacity", 1);
 			dayDistance = Math.round((d.fate-d.commissioned)/86400000); //This is returning PIXELS, not actual DAYS
 
-			tooltip.html(							
-					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Commissioned " 
+			tooltip.html(
+					"<tr><td>" + d.name + "</td><td>Type " + d.type + "</td></tr> <tr><td colspan='2'> Commissioned "
 					+ formatDate(d.commissioned) + "</td></tr><tr><td colspan='2'>"
 					+ d.fate_type + " " + formatDate(d.fate) +  "</td></tr><tr><td colspan='2'>"
 					+ d.ships_sunk + " ships sunk</td></tr><tr><td colspan='2'>"
 					+ dayDistance + " days in service</td></tr>"
 					);
-		})					
+		})
 		.on("mouseout", function(d) {
 			d3.select(this).attr("stroke", colorCommissioned)
-			tooltip.transition()		
-				.duration(50)		
+			tooltip.transition()
+				.duration(50)
 				.style("opacity", 0);
 		});
 
-	
+
 //FATE
-	
+
 	var fateCircles = shipLineGroup
 		.append("circle")
 		.attr("cx", function (d) { return x(d.fate); })
@@ -541,9 +540,9 @@ function drawTimeline(data, targetData, x, y) {
 				break;
 			}
 		})
-		.on("mouseover", function(d) {						
-			tooltip.transition()		
-				.duration(50)		
+		.on("mouseover", function(d) {
+			tooltip.transition()
+				.duration(50)
 				.style("opacity", 1);
 			dayDistance = Math.round((d.fate-d.launched)/86400000); //This is returning PIXELS, not actual DAYS
 
@@ -571,18 +570,18 @@ function drawTimeline(data, targetData, x, y) {
 
 			tooltip.html(getFateCasualties(d));
 		})
-		.on("mouseout", function(d) {		
-			tooltip.transition()		
-				.duration(50)		
+		.on("mouseout", function(d) {
+			tooltip.transition()
+				.duration(50)
 				.style("opacity", 0);
 		});
-	
+
 	var targetLineGroup = allTargetLineGroups.selectAll("g")
 		.data(targetData)
 		.enter()
 		.append("g")
 		.attr("class", "target-line-group");
-	
+
 	var targetLines = targetLineGroup
 		.append("line")
 			.attr("x1", function(d) { return x(d.attack_date) })
@@ -598,7 +597,7 @@ function drawTimeline(data, targetData, x, y) {
 
 
 function sortData(data, sortOption) {
-	
+
 	switch (sortOption) {
 		case "shipName":
 			data = data.sort(function(a, b) { return a.id - b.id ;} );
@@ -631,20 +630,20 @@ function sortData(data, sortOption) {
 			data = data.sort(function(a,b) {return b.ships_sunk - a.ships_sunk || a.launched - b.launched || a.id - b.id ;});
 			break;
 	};
-	
+
 	return data;
 }
 
 //DATA PULL FUNCTION
 
 function runDraw(firstTime, sortOption, fateFilterOption, shipTypeFilterOption) {
-	
+
 	d3.csv("data/uboat-data.csv", function(error1, data) {
 		if (error1) throw error;
-		
+
 		d3.csv("data/uboat-target-data.csv", function(error2, targetData) {
 			if (error2) throw error;
-			
+
 			targetData.forEach(function(d) {
 				d.attack_date = new Date(d.attack_date);
 				d.value = +d.value;
@@ -658,24 +657,24 @@ function runDraw(firstTime, sortOption, fateFilterOption, shipTypeFilterOption) 
 				d.fate = new Date(d.fate);
 				d.value = +d.value;
 			});
-			
+
 			if (firstTime) {
 				drawLegendCareer();
 				drawLegendFate(data);
 				drawFateFilter(data);
 				drawShipTypeFilter(data);
 			}
-			
+
 			if (fateFilterOption != "Show All") {
 				data = data.filter( function(d) {return d.fate_type === fateFilterOption});
 			}
-			
+
 			if (shipTypeFilterOption != "Show All") {
 				data = data.filter( function(d) {return d.type === shipTypeFilterOption});
 			}
 
 			sortData(data, sortOption);
-			
+
 			var uboatNum = data.length;
 			d3.select('#ships-shown').text(uboatNum+" U-boats shown");
 
@@ -704,7 +703,7 @@ function runDraw(firstTime, sortOption, fateFilterOption, shipTypeFilterOption) 
 				.tickSize(0)
 				.tickPadding(10)
 				.orient("left");
-			
+
 			var svgContainer = d3.select("#chart")
 				.append("svg")
 					.attr("id", "svg-container")
@@ -764,16 +763,16 @@ function runDraw(firstTime, sortOption, fateFilterOption, shipTypeFilterOption) 
 runDraw(true, "shipName", "Show All", "Show All");
 
 $('#redraw-button').click(function() {
-	
+
 	var sortDropdown = document.getElementById("sort-options");
 	var sortOption = sortDropdown.options[sortDropdown.selectedIndex].value;
-	
+
 	var fateFilter = document.getElementById("fate-filter");
 	var fateFilterOption = fateFilter.options[fateFilter.selectedIndex].value;
-	
+
 	var shipTypeFilter = document.getElementById("ship-type-filter");
 	var shipTypeFilterOption = shipTypeFilter.options[shipTypeFilter.selectedIndex].value;
-	
+
 	$('#chart').fadeOut('1000', function() {
 		$('#chart').empty();
 		runDraw(false, sortOption, fateFilterOption, shipTypeFilterOption);
@@ -802,61 +801,61 @@ $('#redraw-button').click(function() {
 //				.attr("stroke", colorSunk)
 //				.attr("shape-rendering","crispEdges");
 //	}
-
+//
 //	d3.select('#slider3').call(d3.slider().axis(true).value( [ 1934, 1946 ] ).on("slide", function(evt, value) {
 //		updateDate(value[ 0 ], value[ 1 ]);
 //	}));
 //
 //	updateDate(1934, 1946);
-
-
+//
+//
 //// Draw Type Filter
-//			
+//
 //			function drawFilter(data) {
-//				
+//
 //				var shipTypeCount = d3.nest()
 //					.key(function(d) { return d.type; })
 //					.rollup(function(v) { return v.length; })
 //					.entries(data);
-//							
+//
 //				//shipTypeCount.sort(function(a,b) {return b.values-a.values;});
-//				
+//
 //				var typeDropdown = d3.select("#dropdown-type")
 //					.append("select")
 //					.attr("id","dropdown-type-select");
-//				
+//
 //				var typeDropdownOption = typeDropdown
 //					.selectAll("option")
 //					.data(shipTypeCount)
 //					.enter()
 //					.append("option")
 //					.text(function(d) {return d.key;});
-//				
+//
 ////				var nameInput = d3.select("#name-input");
 //				var nameInput = $("#name-input");
-//				
+//
 //				var filterButton = d3.select("#filter-button")
 //					.on("click", function(d) {
-//					
+//
 //						var typeIndex = $("#dropdown-type-select").selectedIndex;
 //						//var	selectedTypeName = shipTypeCount[selectedType];
 //						var	typeName = typeDropdown.options[typeIndex].text;
-//						
+//
 //						//var selectedName = $("#name-input").value;
-//						
+//
 //						console.log(typeIndex);
 //						//console.log(selectedName);
 //						console.log(typeName);
-//						
+//
 ////						redraw();
-//					})	
-//				
+//					})
+//
 //			}
-
+//
 //			function redraw() {
-//				
-//				
-//				
+//
+//
+//
 //				drawTimeline(data);
 //				drawLegendCareer();
 //				drawLegendFate(data);
@@ -864,15 +863,15 @@ $('#redraw-button').click(function() {
 //			}
 //
 //			function updateDate(yearStart, yearEnd) {
-//				
+//
 //				d3.select('#slider3textmin').text(yearStart);
 //				d3.select('#slider3textmax').text(yearEnd);
-//				
+//
 //				var yearStartDate = new Date("1/1/"+yearStart.toString());
 //				var yearEndDate = new Date("1/1/"+yearEnd.toString());
-//				
+//
 //				if (yearStartDate != yearEndDate ) {
-//					
+//
 //					d3.csv("data/uboat-data.csv", function(error, data) {
 //
 //						x.domain([yearStartDate, yearEndDate]).range([0, width]);
@@ -885,10 +884,10 @@ $('#redraw-button').click(function() {
 //						svg.select(".x-axis-overlay") // change the x axis
 //							.duration(750)
 //							.call(xAxis);
-//					
+//
 //						drawTimeline(data);
 //					});
-//					
+//
 //					d3.csv("data/uboat-target-data.csv", function(error, data) {
 //						x.domain([yearStartDate, yearEndDate]).range([0, width]);
 //						drawTargets(data);

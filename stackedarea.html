@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>U-Boat Timeline</title>
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/grid12.css">
+<!--
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+			<script>if (typeof jQuery === 'undefined') {document.write(unescape('js/jquery.js'));}</script>
+-->
+		<script src="js/jquery.js" charset="utf-8"></script>
+		<script src="js/d3.min.js" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<div id="description">
+			<h1>U-Boat Successes Over Time</h1>
+			<p>
+				This visualization is a timeline of all sinkings by U-Boats. Visit the <a href="https://github.com/kadenhendron/uboat-data">GitHub repository</a> to access the source data and code. Read the <a href="https://medium.com/@kadenhendron/germany-s-u-boats-data-visualization-6e018c6c174#.t6be2ew0i">companion piece</a> on Medium to see more U-Boat data visualizations.
+			</p>
+		</div>
+
+		<div id="chart-container">
+			<div id="chart"></div>
+		</div>
+
+		<table id="tooltip"></table>
+
+		<style>
+
+		.axis path,
+		.axis line {
+			fill: none;
+			stroke: #000;
+			shape-rendering: crispEdges;
+		}
+
+		.area {
+			fill: steelblue;
+			//stroke: #000;
+		}
+
+		</style>
+
+		<script>
+
+			var margin = {top: 20, right: 20, bottom: 30, left: 50},
+				width = 960 - margin.left - margin.right,
+				height = 500 - margin.top - margin.bottom;
+
+			var svg = d3.select("body").append("svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+			var	minDate = new Date("1934"),
+				maxDate = new Date("1/1/1946")
+
+			//var x = d3.scaleTime()
+			//	.rangeRound([0, width]);
+			var	x = d3.time.scale()
+				.domain([minDate, maxDate]).range([0, width]);
+
+			var y = d3.scale.linear()
+				.rangeRound([height, 0]);
+
+			var xAxis = d3.svg.axis()
+				.scale(x)
+				.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+				.scale(y)
+				.orient("left");
+
+			var area = d3.svg.area()
+				.x(function(d) { return x(d.date); })
+				.y0(height)
+				.y1(function(d) { return y(d.count); })
+				;
+
+
+			d3.csv("data/uboat-target-data.csv", function(error, data) {
+				if (error) throw error;
+
+				var targetCount = d3.nest()
+					.key(function(d) {
+						var newDate = new Date(d.attack_date);
+						return d3.time.month(newDate);
+					})
+					.rollup(function(v) { return v.length; })
+					.entries(data);
+
+				targetCount.forEach(function(d) {
+					d.date = new Date(d.key);
+					d.count = +d.values;
+				});
+
+//				console.log(JSON.stringify(targetCount));
+
+				x.domain(d3.extent(targetCount, function(d) { return d.date; }));
+				y.domain([0, d3.max(targetCount, function(d) { return d.count; })]);
+
+				function sortByDateAscending(a, b) {
+					// Dates will be cast to numbers automagically:
+					return a.date - b.date;
+				}
+
+				targetCount = targetCount.sort(sortByDateAscending);
+
+				svg.append("path")
+					.datum(targetCount)
+					.attr("class", "area")
+					.attr("d", area);
+
+//				svg.selectAll(".dot")
+//				  .data(targetCount)
+//				.enter().append("circle")
+//				  .attr("class", "dot")
+//				  .attr("r", 4)
+//				  .attr("cx", function(d) { return x(d.date); })
+//				  .attr("cy", function(d) { return y(d.count); })
+//				  .style("fill", "Red")
+//				  ;
+
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + height + ")")
+					.call(xAxis)
+				.append("text")
+					.attr("y", 20)
+					.attr("x", 36)
+					.attr("dy", ".71em")
+					.style("text-anchor", "end")
+					.text("Weeks");
+
+				svg.append("g")
+					.attr("class", "y axis")
+					.call(yAxis)
+				.append("text")
+					.attr("transform", "rotate(-90)")
+					.attr("y", 6)
+					.attr("dy", ".71em")
+					.style("text-anchor", "end")
+					.text("Ships Sunk");
+			});
+
+
+		</script>
+	</body>
+</html>
