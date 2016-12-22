@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>U-Boat Timeline</title>
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/grid12.css">
+<!--
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+			<script>if (typeof jQuery === 'undefined') {document.write(unescape('js/jquery.js'));}</script>
+-->
+		<script src="js/jquery.js" charset="utf-8"></script>
+		<script src="js/d3.min.js" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<div id="description">
+			<h1>U-Boat Successes Over Time</h1>
+			<p>
+				This visualization is a timeline of all sinkings by U-Boats. Visit the <a href="https://github.com/kadenhendron/uboat-data">GitHub repository</a> to access the source data and code. Read the <a href="https://medium.com/@kadenhendron/germany-s-u-boats-data-visualization-6e018c6c174#.t6be2ew0i">companion piece</a> on Medium to see more U-Boat data visualizations.
+			</p>
+		</div>
+
+		<div id="chart-container">
+			<div id="chart"></div>
+		</div>
+
+		<table id="tooltip"></table>
+
+		<style>
+
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: #000;
+				shape-rendering: crispEdges;
+			}
+
+			.area {
+				fill: steelblue;
+			}
+
+			.line {
+			  fill: none;
+			  stroke: #666;
+			  stroke-width: 1.5px;
+			}
+
+			.bar {
+				fill: #3670bc;
+				opacity: .8;
+			}
+
+		</style>
+
+		<script>
+
+			var margin = {top: 20, right: 20, bottom: 30, left: 50},
+				width = 960 - margin.left - margin.right,
+				height = 200 - margin.top - margin.bottom;
+
+			var	minDate = new Date("1/1/1938"),
+				maxDate = new Date("1/1/1946")
+
+			//var x = d3.scaleTime()
+			//	.rangeRound([0, width]);
+			var	x = d3.time.scale()
+				.domain([minDate, maxDate])
+				.range([0, width]);
+
+			var y = d3.scale.linear()
+				.domain([0, 76])
+				.rangeRound([height, 0]);
+
+			var xAxis = d3.svg.axis()
+				.scale(x)
+				.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+				.scale(y)
+				.orient("left");
+
+
+			var area = d3.svg.area()
+				.x(function(d) {return x(d.month); })
+				.y0(height)
+				.y1(function(d) { return y(d.count); });
+
+			var line = d3.svg.line()
+				.x(function(d) { return x(d.month); })
+				.y(function(d) { return y(d.count); });
+
+
+			function sortByDateAscending(a, b) {
+				// Dates will be cast to numbers automagically:
+				return a.month - b.month;
+			}
+
+			d3.csv("data/uboat-target-data.csv", convertStrings, function(error, data) {
+				if (error) throw error;
+
+				var nationalities = d3.nest()
+					.key(function(d) { return d.nationality; })
+					.key(function(d) {
+						return d3.time.month(d.attack_date);
+					})
+					//.sortKeys(d3.ascending)
+					.rollup(function(v) {
+						return v.length;
+					})
+					.entries(data);
+
+				x.ticks(d3.time.month);
+
+				nationalities.forEach(function(d,i) {
+					d.maxCount = d3.max(d.values, function(n) { return n.values; });
+					//d.id = i
+
+					d.totalSunk = 0
+					d.values.forEach(function(n) {
+						n.month = new Date(n.key)
+						n.count = +n.values
+						d.totalSunk = d.totalSunk + n.count
+
+						d.values = d.values.sort(sortByDateAscending);
+					});
+
+//					var d.values = x.ticks().map(function(monthBucket) {
+//						return _.find(data, {date: monthBucket}) || {date: monthBucket, value: 0};
+//					});
+
+				});
+
+				nationalities.sort(function(a, b) { return b.totalSunk - a.totalSunk ;} );
+
+				nationalities.forEach(function(d,i) {
+					d.id = i
+				});
+
+				console.log(JSON.stringify(nationalities));
+
+//				x.domain([
+//					d3.min(nationalities, function(d) { return d.values[0].month; }),
+//					d3.max(nationalities, function(d) { return d.values[d.values.length - 1].month; })
+//				]);
+
+				//x.domain(d3.extent(nationalities, function(d) { return d.date; }));
+				//y.domain([0, d3.max(targetCount, function(d) { return d.count; })]);
+
+
+
+				var svg = d3.select("body")
+					.append("svg")
+					  .attr("width", width + margin.left + margin.right)
+					  .attr("height", function(d) { return (height*nationalities.length); });
+
+				var svgGroup = svg.selectAll("g")
+					.data(nationalities)
+					.enter()
+					.append("g")
+						.attr("width", width + margin.left + margin.right)
+						.attr("height", height + margin.top + margin.bottom)
+						.attr("transform", function(d) { return "translate(0," + d.id*(height-.8*height) + ")"; });
+
+				  // Add the area path elements. Note: the y-domain is set per element.
+//				  svgGroup.append("path")
+//					  .attr("class", "area")
+//					  .attr("d", function(d) { return area(d.values); });
+
+				  // Add the line path elements. Note: the y-domain is set per element.
+//				  svgGroup.append("path")
+//					  .attr("class", "line")
+//					  .attr("d", function(d) { return line(d.values); });
+//
+//				var circle = svgGroup.selectAll("circle")
+//					.data(function(d) {return d.values;})
+//					.enter()
+//					.append("circle")
+//					  .attr("class", "dot")
+//					  .attr("r", 2)
+//					  .attr("cx", function(n) { return x(n.month); })
+//					  .attr("cy", function(n) { return y(n.count); })
+//					  .style("fill", "Red")
+//					  ;
+
+				var bar = svgGroup.selectAll("rect")
+					.data(function(d) {return d.values;})
+					.enter()
+					.append("rect")
+					  .attr("class", "bar")
+					  .attr("x", function(n) { return x(n.month); })
+					  .attr("y", function(n) { return y(n.count); })
+					  .attr("width", 7)
+					  .attr("height", function(n) { return height - y(n.count); });
+
+				  // Add a small label for the symbol name.
+				  svgGroup.append("text")
+					  .attr("x", 6)
+					  .attr("y", height - 6)
+					  .style("text-anchor", "start")
+					  .text(function(d) { return d.key; });
+			});
+
+			function convertStrings(d) {
+			  d.id = +d.id;
+			  d.attack_date = new Date(d.attack_date);
+			  return d;
+			}
+		</script>
+	</body>
+</html>

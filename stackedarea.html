@@ -37,6 +37,7 @@
 
 		.area {
 			fill: steelblue;
+			//stroke: #000;
 		}
 
 		</style>
@@ -125,7 +126,13 @@
 				svg.append("g")
 					.attr("class", "x axis")
 					.attr("transform", "translate(0," + height + ")")
-					.call(xAxis);
+					.call(xAxis)
+				.append("text")
+					.attr("y", 20)
+					.attr("x", 36)
+					.attr("dy", ".71em")
+					.style("text-anchor", "end")
+					.text("Weeks");
 
 				svg.append("g")
 					.attr("class", "y axis")
@@ -135,7 +142,7 @@
 					.attr("y", 6)
 					.attr("dy", ".71em")
 					.style("text-anchor", "end")
-					.text("Price ($)");
+					.text("Ships Sunk");
 			});
 
 
